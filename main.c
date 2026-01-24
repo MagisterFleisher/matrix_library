@@ -16,7 +16,7 @@
  * @brief The matrix type holds the dimensions of the matrix (i columns x j rows) as well as a pointer to an array that holds the matrix information.  The array has one dimension in order to maintain a contiguous block of memory for all the elements of the array.  A "2-dimensional", or double pointer, a[i][j] does not guarantee fast memory usage.  The 
  * @var i - size_t.  This denotes the number of rows in the matrix
  * @var j - size_t.  This denotes the number of columns in the matrix
- * @var array - a pointer to a place in memory that will hold the values in the array
+ * @var array - a pointer to a place in memory in the heap that will hold the values in the array
  * @var struct of properties
  * @todo bitpack the boolean properties
  * @todo when the matrix is identity, symmetric, diagonal, etc... it can have a more compact representation.

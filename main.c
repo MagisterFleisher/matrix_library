@@ -5,7 +5,7 @@
  * @date 2026-01-23
  * 
  * @todo Find a better way to hold the allocations in memory, perhaps an arena or pool.
- * @todo Use a union to make an easier way to use matrices of different types
+ * @todo Use discriminated unions to make an easier way to use matrices of different types
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -114,6 +114,17 @@ typedef struct Matrix_double_s {
     } properties;
 } matrix_double_t;
 
+typedef enum { M_INT, M_FLOAT, M_DOUBLE } matrix_type_e;
+
+typedef struct Matrix_t {
+    matrix_type_e matrix_type;
+    union {
+        matrix_double_t matrix_double;
+        matrix_int_t matrix_int;
+        matrix_float_t matrix_float;
+    } matrix_union;
+} matrix_t;
+
 
 /**
  * @brief Allocates a place in the heap for the matrix of dimensions i, columns, by j, rows 
@@ -145,67 +156,172 @@ m_at(matrix_int_t m, int i, int j);
 matrix_int_t*
 m_multiply(matrix_int_t *m1, matrix_int_t *m2);
 
+
+/**
+ * @brief
+ * @param
+ * @return
+ */
 int
 m_dotProduct(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 float
 m_eigenValue(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 matrix_int_t*
 m_eigenVector(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 matrix_int_t*
 m_transpose(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 int
 m_determinant(matrix_int_t *m);
 
-
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isBinary(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isColumn(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isRow(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isSquare(matrix_int_t *m);  /** If it isn't square, it is rectangular */
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isSingleton(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isTriangular(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isDiagonal(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isIdentity(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isNull(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isSymmetric(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isOrthogonal(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isSingular(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isIdempotent(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isInvolutory(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isNilpotent(matrix_int_t *m);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 bool
 m_isStochastic(matrix_int_t *m);
 

@@ -126,6 +126,8 @@ typedef struct Matrix_t {
 } matrix_t;
 
 
+/*************************** MATRIX OPERATIONS ************************/
+
 /**
  * @brief Allocates a place in the heap for the matrix of dimensions i, columns, by j, rows 
  * @param i The number of rows, i.e. vectors
@@ -196,6 +198,10 @@ m_transpose(matrix_int_t *m);
  */
 int
 m_determinant(matrix_int_t *m);
+
+
+
+/*************************** MATRIX CHARACTERIZATIONS ************************** */
 
 /**
  * @brief
@@ -324,6 +330,8 @@ m_isNilpotent(matrix_int_t *m);
  */
 bool
 m_isStochastic(matrix_int_t *m);
+
+
 
 
 int

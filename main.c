@@ -326,8 +326,6 @@ bool
 m_isStochastic(matrix_int_t *m);
 
 
-
-
 int
 main(int argument_count, char **argument_vector) {
     (void) printf("Argument count: %d\n", argument_count);

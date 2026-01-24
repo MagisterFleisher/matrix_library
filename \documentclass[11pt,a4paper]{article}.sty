@@ -1,0 +1,81 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{Numerical Foundations of Machine Learning:\\From High-Performance Fortran to Quantization Theory}
+\author{Technical Briefing}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+While Python dominates the user-facing interface of Machine Learning (ML), the underlying computational engine relies on High-Performance Computing (HPC) principles. This document explores the transition from Fortran-based numerical kernels to the modern mathematical contention of data-type quantization in distributed GPU environments.
+
+\section{The Role of Fortran in Distributed ML}
+Modern ML research utilizes Fortran primarily for its efficiency in dense linear algebra (BLAS/LAPACK). In large-scale distributed environments, Fortran harnesses performance through a three-tiered architecture:
+
+\begin{itemize}
+    \item \textbf{Inter-Node Communication:} Message Passing Interface (MPI) is used to distribute data batches across a cluster.
+    \item \textbf{GPU Offloading:} Directives such as \texttt{OpenACC} or \texttt{OpenMP 5.x} allow Fortran loops to execute on GPU hardware.
+    \item \textbf{Kernel Optimization:} Libraries like \texttt{cuBLAS} and \texttt{NCCL} provide the backend for gradient synchronization across multiple nodes.
+\end{itemize}
+
+\section{The Mathematics of Quantization}
+In modern research, the assumption of infinite precision ($\mathbb{R}$) is replaced by the constraints of finite hardware. Affine Quantization is the formal mapping of a real-valued tensor to a discrete integer space.
+
+\subsection{The Mapping Function}
+To transform a continuous value $x$ into a $k$-bit integer $x_q$, we define the scale $S$ and zero-point $Z$:
+
+\begin{equation}
+x_q = \text{clamp}\left( \left\lfloor \frac{x}{S} \right\rceil + Z, q_{min}, q_{max} \right)
+\end{equation}
+
+Where $\lfloor \cdot \rceil$ denotes rounding to the nearest integer. The inverse operation, or dequantization, is defined as:
+
+\begin{equation}
+\hat{x} = S \cdot (x_q - Z)
+\end{equation}
+
+\subsection{Optimization of Hyperparameters}
+Given a real-world range $[\alpha, \beta]$, the optimal parameters for a $k$-bit range (e.g., $[0, 255]$) are calculated as:
+
+\begin{equation}
+S = \frac{\beta - \alpha}{2^k - 1}, \quad Z = \text{round}\left( q_{min} - \frac{\alpha}{S} \right)
+\end{equation}
+
+\section{Fundamental Challenges for Researchers}
+The primary contention in ML mathematics is the \textbf{non-differentiability} of the quantization function. Since the derivative of a step function is zero almost everywhere, standard backpropagation fails:
+
+\begin{equation}
+\frac{\partial x_q}{\partial x} \approx 0
+\end{equation}
+
+Researchers circumvent this using the \textbf{Straight-Through Estimator (STE)}, which approximates the gradient during the backward pass as an identity function:
+
+\begin{equation}
+\text{Backward Pass: } \frac{\partial L}{\partial x} \approx \frac{\partial L}{\partial x_q}
+\end{equation}
+
+\section{Summary Table}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Feature} & \textbf{High-Precision (FP32/64)} & \textbf{Quantized (INT8/4)} \\
+\midrule
+Numerical Noise & Minimal (Rounding error) & High (Quantization noise) \\
+Hardware Speed & Standard & 4x - 10x faster on Tensor Cores \\
+Memory Footprint & $32$ bits per parameter & $8$ or $4$ bits per parameter \\
+Differentiation & Native (Calculus) & Simulated (STE) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

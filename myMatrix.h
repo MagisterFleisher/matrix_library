@@ -16,6 +16,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
 
 /**
  * @note Not all matrices have eigenvectors in the real numbers.  But, all matrices have eigenvectors if one expands the field to the complex numbers.
@@ -197,7 +198,7 @@ m_multiply_int(matrix_int_t *m1, matrix_int_t *m2);
  * @return
  */
 int
-m_dotProduct_int(matrix_int_t *m);
+m_dotProduct_int(int *a1, int *a2, size_t length);
 
 /**
  * @brief

@@ -72,22 +72,24 @@ printMatrix_int(matrix_int_t *m) {
             size_t array_member = (row * m->j) + column;
             (void) printf("%d ", m->array[array_member]);
         }
+        (void) printf("\n");
     }
     /**
      * @todo Write a section that prints out meta-data about matrix.
      */
 }
 
-
 /**
  * @brief This function finds the value of the matrix at any given dimension.
  * @param m The matrix
  * @param i The row (i.e. value)
- * @param j The columnTriton Programming Language (i.e. value)
+ * @param j The column (i.e. value)
  * @return Value at that column x row
  */
 int
-m_at_int(matrix_int_t *m, int i, int j);
+m_at_int(matrix_int_t *m, int i, int j) {
+    return m->array[(i * m->j) + j];
+}
 
 
 /**
@@ -97,16 +99,52 @@ m_at_int(matrix_int_t *m, int i, int j);
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_multiply_int(matrix_int_t *m1, matrix_int_t *m2);
+m_multiply_int(matrix_int_t *m1, matrix_int_t *m2) {
+    assert(m1->j == m2->i);
+    /** The matrix result with have m1->rows and m2->columns */
+    matrix_int_t *m = initializeMatrix_int(m1->i, m2->j);
+    /**
+     * Take dot product of first row of first matrix 
+     *      and first column of second matrix.
+     */
+    const size_t result_array_length = m->i * m->j;
+    size_t result_array_index = 0;
 
+    for(size_t row_index = 0; row_index < m->i; row_index++) {
+        for(size_t column_index = 0; column_index < m->j; column_index++) {
+            int *row1_array = calloc(m1->i, sizeof(int));
+            int *column2_array = calloc(m2->j, sizeof(int));
+            int row_offset = m1->j * row_index;
+            memcpy(row1_array, m1->array + row_offset, m1->i * sizeof(int));
+            for(size_t index = 0; index < m2->j; index++) {
+                column2_array[index] = m_at_int(m2, index, column_index);
+            }
+            int element = m_dotProduct_int(row1_array, column2_array, m1->i);
+            m->array[result_array_index] = element;
+            free(column2_array);
+            free(row1_array);
+
+            result_array_index++;
+        }
+    }
+    return m;
+}
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds the dot product of two integer arrays of equal size
+ * @param a1 integer array
+ * @param a2 integer array
+ * @param length length of both arrays
+ * @return An integer value
  */
 int
-m_dotProduct_int(matrix_int_t *m);
+m_dotProduct_int(int *a1, int *a2, const size_t length) {
+    int product = 0;
+    for(size_t index = 0; index < length; index++) {
+        product += a1[index] * a2[index];
+    }
+    return product;
+}
 
 /**
  * @brief

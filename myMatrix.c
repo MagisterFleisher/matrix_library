@@ -183,44 +183,59 @@ m_determinant_int(matrix_int_t *m);
 /*************************** MATRIX CHARACTERIZATIONS ************************** */
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Find whether all values in the matrix are binary (i.e. 0 or 1)
+ * @param m Pointer to the matrix_int_t struct.  It includes the number of rows, the number of columns, and the array of values required by the function
+ * @return boolean.  True if the matrix only includes binary values.  False if the matrix includes non binary values.
  */
 bool
-m_isBinary_int(matrix_int_t *m);
+m_isBinary_int(matrix_int_t *m) {
+    for(size_t index = 0; index < (m->i * m->j); index++) { /* Note: m->i and m->j are size_t, so the index for this loop is also size_t.  Can this be improved? */
+        if((0 != m->array[index]) && (1 != m->array[index])) {
+            return false;
+        }
+    }
+    return true;
+}
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Find if this is a column matrix.  The row value should equal 1.
+ * @param m Pointer to the matrix_int_t struct. 
+ * @return boolean.  True if this is a column matrix.  False if this is not a column matrix.
  */
 bool
-m_isColumn_int(matrix_int_t *m);
+m_isColumn_int(matrix_int_t *m) {
+    return (1 == m->i) ? true : false;
+}
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Find if this is a row matrix. The column value should equal 1.
+ * @param m Pointer to the matrix_int_t struct.
+ * @return boolean.  True if this a row matrix. False if this is not a column matrix.
  */
 bool
-m_isRow_int(matrix_int_t *m);
+m_isRow_int(matrix_int_t *m) {
+    return (1 == m->j) ? true : false;
+}
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Find if this is a square matrix.  A square matrix has the same number of rows as it does columns.  Only square matrices have determinants.
+ * @param m Pointer to the matrix_int_t struct.
+ * @return boolean.  True if this is a square matrix.  False if this is not a square matrix.
  */
 bool
-m_isSquare_int(matrix_int_t *m);  /** If it isn't square, it is rectangular */
+m_isSquare_int(matrix_int_t *m) {
+    return (m->i == m->j) ? true : false;
+}  /** If it isn't square, it is rectangular */
 
 /**
- * @brief
- * @param
+ * @brief Find if this is a singleton matrix, i.e. the number of rows and columns both equal 1.
+ * @param m Pointer to the matrix_int_t struct.
  * @return
  */
 bool
-m_isSingleton_int(matrix_int_t *m);
+m_isSingleton_int(matrix_int_t *m) {
+    return ((1 == m->i) && (1 == m->j)) ? true : false;
+}
 
 /**
  * @brief

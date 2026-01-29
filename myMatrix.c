@@ -81,6 +81,8 @@ printMatrix_int(matrix_int_t *m) {
     (void) printf("\tisSingleton: %d\n", m_isSingleton_int(m));
     (void) printf("\tisUpperTriangular: %d\n", m_isUpperTriangular_int(m));
     (void) printf("\tisLowerTriangular: %d\n", m_isLowerTriangular_int(m));
+    (void) printf("\tisIdentity: %d\n", m_isIdentity_int(m));
+    (void) printf("\tisDiagonal: %d\n", m_isDiagonal_int(m));
     (void) printf("\n");
 }
 
@@ -157,7 +159,12 @@ m_dotProduct_int(int *a1, int *a2, const size_t length) {
  * @return
  */
 float
-m_eigenValue_int(matrix_int_t *m);
+m_eigenValue_int(matrix_int_t *m) {
+    if(m_isIdentity_int(m)) {
+        return 1.0;
+    }
+    return 0;
+}
 
 /**
  * @brief
@@ -175,7 +182,7 @@ m_eigenVector_int(matrix_int_t *m);
 int*
 m_transpose_int(matrix_int_t *m) {
     int *transpose_array = calloc(m->i * m->j, sizeof(int));
-    if(m_isIdentity_int(m) || (m_isUpperTriangular_int(m) && m_isLowerTriangular_int(m))) {
+    if(m_isIdentity_int(m) || (m_isDiagonal_int(m))) {
         memcpy(transpose_array, m->array, (m->i * m->j) * sizeof(int));
         return transpose_array;
     }
@@ -185,7 +192,6 @@ m_transpose_int(matrix_int_t *m) {
             transpose_array[transpose_index] = m_at_int(m, j_index, i_index);
             transpose_index++;
         }
-        transpose_index++;
     }
     return transpose_array;
 }
@@ -198,6 +204,9 @@ m_transpose_int(matrix_int_t *m) {
 int
 m_determinant_int(matrix_int_t *m) {
     assert(m_isSquare_int(m));
+    if(m_isIdentity_int(m)) {
+        return 1;
+    }
 }
 
 /**
@@ -324,7 +333,9 @@ m_isLowerTriangular_int(matrix_int_t *m) {
  * @return boolean.  True if it is diagonal, false otherwise.
  */
 bool
-m_isDiagonal_int(matrix_int_t *m);
+m_isDiagonal_int(matrix_int_t *m) {
+    return (m_isLowerTriangular_int(m) && m_isUpperTriangular_int(m)) ? true : false;
+}
 
 /**
  * @brief Finds if the matrix is an identity matrix.  An identity matrix is a diagonal matrix with the value 1 along the diagonal.  Multiply any matrix by the identity matrix and the result with be the matrix.
@@ -333,7 +344,7 @@ m_isDiagonal_int(matrix_int_t *m);
  */
 bool
 m_isIdentity_int(matrix_int_t *m) {
-    if(!m_isBinary_int(m) || !(m_isLowerTriangular_int(m) && m_isUpperTriangular_int(m))) {
+    if(!m_isBinary_int(m) || !(m_isDiagonal_int(m))) {
         return false;
     }
     for(int index = 0; index < m->i; index++) {
@@ -350,7 +361,14 @@ m_isIdentity_int(matrix_int_t *m) {
  * @return boolean.  True if the matrix is null, false otherwise.
  */
 bool
-m_isNull_int(matrix_int_t *m);
+m_isNull_int(matrix_int_t *m) {
+    for(int index = 0; index < (m->i * m->j); index++) {
+        if(0 != m->array[index]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 /**
  * @brief Finds if the matrix is symmetric, this means for all x and y, Mxy = Myx

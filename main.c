@@ -65,6 +65,14 @@ main(int argument_count, char **argument_vector) {
     copyArrayToMatrix_int(m7, matrix_array7, 1);
     printMatrix_int(m7);
 
+    matrix_int_t *test_multiplication2 = m_multiply_int(m4, m2);
+    printMatrix_int(test_multiplication2);
+
+    matrix_int_t *test_multiplication3 = m_multiply_int(m2, m4);
+    printMatrix_int(test_multiplication3);
+
+    freeMatrix_int(test_multiplication3);
+    freeMatrix_int(test_multiplication2);
     freeMatrix_int(m7);
     freeMatrix_int(m6);
     freeMatrix_int(m5);

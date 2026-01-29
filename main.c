@@ -15,8 +15,12 @@ main(int argument_count, char **argument_vector) {
     matrix_int_t *m = initializeMatrix_int(3, 3);
     matrix_int_t *m2 = initializeMatrix_int(3, 3);
     matrix_int_t *m3 = initializeMatrix_int(3, 3);
+    matrix_int_t *m4 = initializeMatrix_int(3, 3);
+    matrix_int_t *m5 = initializeMatrix_int(3, 1);
+    matrix_int_t *m6 = initializeMatrix_int(1, 3);
+    matrix_int_t *m7 = initializeMatrix_int(1, 1);
 
-    int matrix_array[9] = {1, 2, 3, 
+    const int matrix_array[9] = {1, 2, 3, 
                         4, 5, 6, 
                         7, 8, 9};
     copyArrayToMatrix_int(m, matrix_array, 9);
@@ -24,7 +28,7 @@ main(int argument_count, char **argument_vector) {
     printMatrix_int(m);
     (void) printf("At m[2, 1] : %d\n", m_at_int(m, 1,0));
 
-    int matrix_array2[9] = {1, 2, 3,
+    const int matrix_array2[9] = {1, 2, 3,
                             4, 5, 6,
                             7, 8, 9};
     copyArrayToMatrix_int(m2, matrix_array2, 9);
@@ -35,26 +39,36 @@ main(int argument_count, char **argument_vector) {
     printMatrix_int(test_multiplication);
 
 
-    int matrix_array3[9] = {1, 0, 1,
+    const int matrix_array3[9] = {1, 0, 1,
                             1, 1, 1,
                             0, 1, 0};
-    copyArrayToMatrix_int(m3, matrix_array2, 9);
+    copyArrayToMatrix_int(m3, matrix_array3, 9);
     printMatrix_int(m3);
 
+    const int matrix_array4[9] = {1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1};
+    copyArrayToMatrix_int(m4, matrix_array4, 9);
+    printMatrix_int(m4);
 
-    matrix_int_t *matrices[4] = {m, m2, test_multiplication, m3};
+    const int matrix_array5[3] = {1, 0, 0};
+    copyArrayToMatrix_int(m5, matrix_array5, 3);
+    printMatrix_int(m5);
 
-    for(int index = 0; index < 4; index++) {
-        (void) printf("matrix %d\tisBinary: %d\n", index, m_isBinary_int(matrices[index]));
-        (void) printf("matrix %d\tisColumn: %d\n", index, m_isColumn_int(matrices[index]));
-        (void) printf("matrix %d\tisRow: %d\n", index, m_isRow_int(matrices[index]));
-        (void) printf("matrix %d\tisSquare: %d\n", index, m_isSquare_int(matrices[index]));
-        (void) printf("matrix %d\tisSingleton: %d\n", index, m_isSingleton_int(matrices[index]));
-        (void) printf("matrix %d\tisUpperTriangular: %d\n", index, m_isUpperTriangular_int(matrices[index]));
-        (void) printf("matrix %d\tisLowerTriangular: %d\n", index, m_isLowerTriangular_int(matrices[index]));
-        (void) printf("\n");
-    }
+    const int matrix_array6[3] = {1, 
+                                0, 
+                                0};
+    copyArrayToMatrix_int(m6, matrix_array6, 3);
+    printMatrix_int(m6);
 
+    const int matrix_array7[1] = {1};
+    copyArrayToMatrix_int(m7, matrix_array7, 3);
+    printMatrix_int(m7);
+
+    freeMatrix_int(m7);
+    freeMatrix_int(m6);
+    freeMatrix_int(m5);
+    freeMatrix_int(m4);
     freeMatrix_int(m3);
     freeMatrix_int(test_multiplication);
     freeMatrix_int(m2);

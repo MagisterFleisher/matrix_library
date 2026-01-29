@@ -162,7 +162,7 @@ void freeMatrix_int(matrix_int_t *m);
  * @param array integer list. The list of integer values to be added into the matrix
  * @param array_length size_t. This ensures that the function won't try to copy beyond the size of the array.  It also lets the function be sure that the array fits the matrix size.
  */
-void copyArrayToMatrix_int(matrix_int_t *m, int *array, const size_t array_length);
+void copyArrayToMatrix_int(matrix_int_t *m, const int *array, const size_t array_length);
 
 /**
  * @brief Prints the matrix to stdout in the appropriate dimensions

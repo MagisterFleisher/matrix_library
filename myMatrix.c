@@ -53,7 +53,7 @@ freeMatrix_int(matrix_int_t *m) {
  * @param array_length size_t. This ensures that the function won't try to copy beyond the size of the array.  It also lets the function be sure that the array fits the matrix size.
  */
 void
-copyArrayToMatrix_int(matrix_int_t *m, int *array, const size_t array_length) {
+copyArrayToMatrix_int(matrix_int_t *m, const int *array, const size_t array_length) {
     assert(array_length == (m->i * m->j));
 
     for(size_t index = 0; index < array_length; index++) {
@@ -74,9 +74,14 @@ printMatrix_int(matrix_int_t *m) {
         }
         (void) printf("\n");
     }
-    /**
-     * @todo Write a section that prints out meta-data about matrix.
-     */
+    (void) printf("\tisBinary: %d\n", m_isBinary_int(m));
+    (void) printf("\tisColumn: %d\n", m_isColumn_int(m));
+    (void) printf("\tisRow: %d\n", m_isRow_int(m));
+    (void) printf("\tisSquare: %d\n", m_isSquare_int(m));
+    (void) printf("\tisSingleton: %d\n", m_isSingleton_int(m));
+    (void) printf("\tisUpperTriangular: %d\n", m_isUpperTriangular_int(m));
+    (void) printf("\tisLowerTriangular: %d\n", m_isLowerTriangular_int(m));
+    (void) printf("\n");
 }
 
 /**
@@ -107,7 +112,7 @@ m_multiply_int(matrix_int_t *m1, matrix_int_t *m2) {
      * Take dot product of first row of first matrix 
      *      and first column of second matrix.
      */
-    const size_t result_array_length = m->i * m->j;
+    //const size_t result_array_length = m->i * m->j;
     size_t result_array_index = 0;
 
     for(size_t row_index = 0; row_index < m->i; row_index++) {
@@ -251,10 +256,13 @@ m_isSingleton_int(matrix_int_t *m) {
  */
 bool
 m_isUpperTriangular_int(matrix_int_t *m) {
-    size_t i_index = 1;
+    if(false == m_isSquare_int(m)) {
+        return false;
+    }
+    size_t i_index = 0;
     size_t j_index = 0;
     while((i_index < m->i) && (j_index < m->j)) {
-        if(i_index > j_index) {
+        if(i_index >= j_index) {
             j_index++;
             if(0 != m_at_int(m, i_index, j_index)) {
                 return false;
@@ -274,6 +282,9 @@ m_isUpperTriangular_int(matrix_int_t *m) {
  */
 bool
 m_isLowerTriangular_int(matrix_int_t *m) {
+    if(false == m_isSquare_int(m)) {
+        return false;
+    }
     size_t i_index = 0;
     size_t j_index = 1;
     while((i_index < m->i) && (j_index < m->j)) {
@@ -289,7 +300,6 @@ m_isLowerTriangular_int(matrix_int_t *m) {
     /* The function would only reach this return if it has encountered no instance not indicative of an upper triangular matrix. */
     return true;
 }
-
 
 /**
  * @brief Finds if the matrix is diagonal, i.e. it only has non-zero values where i == j.  A diagonal matrix can be use to scale other matrices when multiplied.
@@ -372,7 +382,6 @@ m_isInvolutory_int(matrix_int_t *m);
  */
 bool
 m_isNilpotent_int(matrix_int_t *m);
-
 
 /**
  * @brief Determines if the matrix is right stochastic.  In other words the matrix is square, it has nonnegative real numbers, and the sum of each row is 1.

@@ -62,7 +62,7 @@ main(int argument_count, char **argument_vector) {
     printMatrix_int(m6);
 
     const int matrix_array7[1] = {1};
-    copyArrayToMatrix_int(m7, matrix_array7, 3);
+    copyArrayToMatrix_int(m7, matrix_array7, 1);
     printMatrix_int(m7);
 
     freeMatrix_int(m7);

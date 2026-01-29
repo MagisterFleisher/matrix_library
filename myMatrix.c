@@ -168,20 +168,36 @@ complex*
 m_eigenVector_int(matrix_int_t *m);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Creates a new array in memory containing the transpose of the matrix. 
+ * @param m Pointer to matrix_int_t object. 
+ * @return A new array in memory.
  */
 int*
-m_transpose_int(matrix_int_t *m);
+m_transpose_int(matrix_int_t *m) {
+    int *transpose_array = calloc(m->i * m->j, sizeof(int));
+    if(m_isIdentity_int(m) || (m_isUpperTriangular_int(m) && m_isLowerTriangular_int(m))) {
+        memcpy(transpose_array, m->array, (m->i * m->j) * sizeof(int));
+        return transpose_array;
+    }
+    int transpose_index = 0;
+    for(int i_index = 0; i_index < m->i; i_index++) {
+        for(int j_index = 0; j_index < m->j; j_index++) {
+            transpose_array[transpose_index] = m_at_int(m, j_index, i_index);
+            transpose_index++;
+        }
+    }
+    return transpose_array;
+}
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Returns the value (a scalar) of the determinant of a matrix.  Only square matrices have determinants. 
+ * @param  m Pointer to matrix_int_t object.
+ * @return integer value
  */
 int
-m_determinant_int(matrix_int_t *m);
+m_determinant_int(matrix_int_t *m) {
+    assert(m_isSquare_int(m));
+}
 
 /**
  * @brief Determines if a matrix is nilpotent.  In other words, whether that 
@@ -315,7 +331,17 @@ m_isDiagonal_int(matrix_int_t *m);
  * @return boolean.  True if the matrix is an identity matrix, false otherwise.
  */
 bool
-m_isIdentity_int(matrix_int_t *m);
+m_isIdentity_int(matrix_int_t *m) {
+    if(!m_isBinary_int(m) || !(m_isLowerTriangular_int(m) && m_isUpperTriangular_int(m))) {
+        return false;
+    }
+    for(int index = 0; index < m->i; index++) {
+        if(1 != m_at_int(m, index, index)) {
+            return false;
+        }
+    }
+    return true;
+}
 
 /**
  * @brief Finds if the matrix is a null matrix.  A null matrix has only 0 values.  This can be considered a special case of a binary matrix.  It's also a diagonal matrix, upper and lower triangular, and symmetric.

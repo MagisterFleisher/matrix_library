@@ -230,11 +230,34 @@ m_isSquare_int(matrix_int_t *m) {
 /**
  * @brief Find if this is a singleton matrix, i.e. the number of rows and columns both equal 1.
  * @param m Pointer to the matrix_int_t struct.
- * @return
+ * @return boolean.  True if this is a singleton matrix.  False if this is not a singleton matrix.
  */
 bool
 m_isSingleton_int(matrix_int_t *m) {
     return ((1 == m->i) && (1 == m->j)) ? true : false;
+}
+
+/**
+ * @brief Find if the matrix is upper triangular (but not strictly so), i.e. if the row number is less than the column number, the value must be zero.
+ * @param m Pointer to the matrix_int_t struct
+ * @return boolean.  True if this matrix is upper triangular; false if not.
+ */
+bool
+m_isUpperTriangular_int(matrix_int_t *m) {
+    size_t i_index = 1;
+    size_t j_index = 0;
+    while((i_index < m->i) && (j_index < m->j)) {
+        if(i_index > j_index) {
+            j_index++;
+            if(0 != m_at_int(m, i_index, j_index)) {
+                return false;
+            }
+        } else {
+            i_index++;
+        }
+    }
+    /* The function would only reach this return if it has encountered no instance not indicative of an upper triangular matrix. */
+    return true;
 }
 
 /**
@@ -243,7 +266,23 @@ m_isSingleton_int(matrix_int_t *m) {
  * @return
  */
 bool
-m_isTriangular_int(matrix_int_t *m);
+m_isLowerTriangular_int(matrix_int_t *m) {
+    size_t i_index = 0;
+    size_t j_index = 1;
+    while((i_index < m->i) && (j_index < m->j)) {
+        if(i_index < j_index) {
+            j_index++;
+            if(0 != m_at_int(m, i_index, j_index)) {
+                return false;
+            }
+        } else {
+            i_index++;
+        }
+    }
+    /* The function would only reach this return if it has encountered no instance not indicative of an upper triangular matrix. */
+    return true;
+}
+
 
 /**
  * @brief

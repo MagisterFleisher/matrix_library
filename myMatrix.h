@@ -282,7 +282,16 @@ m_isSingleton_int(matrix_int_t *m);
  * @return
  */
 bool
-m_isTriangular_int(matrix_int_t *m);
+m_isUpperTriangular_int(matrix_int_t *m);
+
+/**
+ * @brief
+ * @param
+ * @return
+ */
+bool
+m_isLowerTriangular_int(matrix_int_t *m);
+
 
 /**
  * @brief

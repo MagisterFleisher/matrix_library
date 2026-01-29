@@ -178,6 +178,13 @@ m_transpose_int(matrix_int_t *m);
 int
 m_determinant_int(matrix_int_t *m);
 
+/**
+ * @brief Determines if a matrix is nilpotent.  In other words, whether that 
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
+ */
+unsigned int
+m_nilPotentDegree_int(matrix_int_t *m);
 
 
 /*************************** MATRIX CHARACTERIZATIONS ************************** */
@@ -343,7 +350,7 @@ m_isSingular_int(matrix_int_t *m);
 
 
 /**
- * @brief
+ * @brief Determines whether a matrix is idempotent.  In other words, whether the matrix multiplied by itself yields itself.  A x A = A
  * @param m Pointer to matrix_int_t object.
  * @return boolean.  True if orthogonal, false otherwise.
  */
@@ -351,7 +358,7 @@ bool
 m_isIdempotent_int(matrix_int_t *m);
 
 /**
- * @brief
+ * @brief Determines whether a matrix is involutory.  In other words, if that matrix is its own inverse.
  * @param m Pointer to matrix_int_t object.
  * @return boolean.  True if orthogonal, false otherwise.
  */
@@ -359,18 +366,46 @@ bool
 m_isInvolutory_int(matrix_int_t *m);
 
 /**
- * @brief
+ * @brief Determines if a matrix is nilpotent.  In other words, whether that there exists some k such that M^k = a null matrix.  Such a matrix has an eigenvalue of 0.  Given an identity matrix, I, the determinent of(I + N) = 0.
  * @param m Pointer to matrix_int_t object.
  * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
 m_isNilpotent_int(matrix_int_t *m);
 
+
 /**
- * @brief A stochastic 
- * @param m Pointer to matrix_int_t object.
+ * @brief Determines if the matrix is right stochastic.  In other words the matrix is square, it has nonnegative real numbers, and the sum of each row is 1.
+ * @param m Pointer to matrix_float_t object.
  * @return boolean.  True if orthogonal, false otherwise.
  * @note Easy to parallelize
  */
 bool
-m_isStochastic_int(matrix_int_t *m);
+m_isRightStochastic_float(matrix_int_t *m);
+
+/**
+ * @brief Determines if the matrix is left stochastic.  In other words the matrix is square, it has nonnegative real numbers, and the sum of each column is 1.
+ * @param m Pointer to matrix_float_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
+ * @note Easy to parallelize
+ */
+bool
+m_isLeftStochastic_float(matrix_int_t *m);
+
+/**
+ * @brief Determines if the matrix is doubly stochastic.  In other words the matrix is square, it has nonnegative real numbers, the sum of each row is 1, and sum of each column is 1.
+ * @param m Pointer to matrix_float_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
+ * @note Easy to parallelize
+ */
+bool
+m_isDoublyStochastic_float(matrix_int_t *m);
+
+/**
+ * @brief Determines if the matrix is substochastic.  In other words the matrix is square, it has nonnegative real numbers, and the sum of each row is less than or equal to 1.  All right and doubly stochastic matrices are substochastic as well
+ * @param m Pointer to matrix_float_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
+ * @note Easy to parallelize
+ */
+bool
+m_isSubStochastic_float(matrix_int_t *m);

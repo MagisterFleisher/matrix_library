@@ -261,9 +261,9 @@ m_isUpperTriangular_int(matrix_int_t *m) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Find if the matrix is lower triangular (but not strictly so), i.e. if the row number is greater than the column number, the value must be zero.
+ * @param m Pointer to the matrix_int_t struct
+ * @return boolean.  True if this matrix is lower triangular; false if not.
  */
 bool
 m_isLowerTriangular_int(matrix_int_t *m) {
@@ -285,81 +285,91 @@ m_isLowerTriangular_int(matrix_int_t *m) {
 
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds if the matrix is diagonal, i.e. it only has non-zero values where i == j.  A diagonal matrix can be use to scale other matrices when multiplied.
+ * @param m Pointer to matrix_int_t struct object
+ * @return boolean.  True if it is diagonal, false otherwise.
  */
 bool
 m_isDiagonal_int(matrix_int_t *m);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds if the matrix is an identity matrix.  An identity matrix is a diagonal matrix with the value 1 along the diagonal.  Multiply any matrix by the identity matrix and the result with be the matrix.
+ * @param m Pointer to matrix_int_t object
+ * @return boolean.  True if the matrix is an identity matrix, false otherwise.
  */
 bool
 m_isIdentity_int(matrix_int_t *m);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds if the matrix is a null matrix.  A null matrix has only 0 values.  This can be considered a special case of a binary matrix.  It's also a diagonal matrix, upper and lower triangular, and symmetric.
+ * @param m Pointer to matrix_int_t object
+ * @return boolean.  True if the matrix is null, false otherwise.
  */
 bool
 m_isNull_int(matrix_int_t *m);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds if the matrix is symmetric, this means for all x and y, Mxy = Myx
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if symmetric, false otherwise.
  */
 bool
 m_isSymmetric_int(matrix_int_t *m);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds if the matrix is invertible.  This means that this matrix can be multiplied by another matrix to yield the identity matrix.
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
+ */
+bool
+m_isInvertable(matrix_int_t *m);
+
+/**
+ * @brief Finds if the matrix is orthogonal.  This means that multiplying the matrix with its transpose yields the identity matrix.  This is a special case of an invertable matrix.
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
 m_isOrthogonal_int(matrix_int_t *m);
 
+
 /**
- * @brief
- * @param
- * @return
+ * @brief Determines if the matrix is singular.  In other words, it is a square matrix, it is not invertable, and it has a determinant equal to 0.
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
 m_isSingular_int(matrix_int_t *m);
 
+
 /**
  * @brief
- * @param
- * @return
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
 m_isIdempotent_int(matrix_int_t *m);
 
 /**
  * @brief
- * @param
- * @return
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
 m_isInvolutory_int(matrix_int_t *m);
 
 /**
  * @brief
- * @param
- * @return
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
 m_isNilpotent_int(matrix_int_t *m);
 
 /**
  * @brief A stochastic 
- * @param
- * @return
+ * @param m Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  * @note Easy to parallelize
  */
 bool

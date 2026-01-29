@@ -185,6 +185,7 @@ m_transpose_int(matrix_int_t *m) {
             transpose_array[transpose_index] = m_at_int(m, j_index, i_index);
             transpose_index++;
         }
+        transpose_index++;
     }
     return transpose_array;
 }

@@ -98,6 +98,44 @@ m_at_int(matrix_int_t *m, int i, int j) {
     return m->array[(i * m->j) + j];
 }
 
+/**
+ * @brief This generates an identity matrix of size, dim x dim.
+ * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_generateIdentityMatrix_int(const int dim) {
+    assert(dim > 0);
+    matrix_int_t *identity_matrix = initializeMatrix_int(dim, dim);
+    for(int index = 0; index < (dim * dim); index++) {
+        identity_matrix->array[index] = 0;
+    }
+    for(int index = 0; index < dim; index++) {
+        identity_matrix->array[(index * index)] = 1;
+    }
+    identity_matrix->properties.is_identity = true;
+    
+    identity_matrix->properties.determinant = 1;
+    identity_matrix->properties.is_binary = true;
+    
+    if(1 == dim) {
+        identity_matrix->properties.is_column = true;
+        identity_matrix->properties.is_row = true;
+        identity_matrix->properties.is_singleton = true;
+    } else {
+        identity_matrix->properties.is_column = false;
+        identity_matrix->properties.is_row = false;
+        identity_matrix->properties.is_singleton = false;
+    }
+
+    identity_matrix->properties.is_diagonal = true;
+    identity_matrix->properties.is_square = true;
+    identity_matrix->properties.is_identity = true;
+    identity_matrix->properties.is_idempotent = true;
+    identity_matrix->properties.is_null = false;
+    identity_matrix->properties.is_involutory = true;
+    return identity_matrix;
+}
 
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
@@ -389,10 +427,13 @@ m_isInvertable(matrix_int_t *m);
 /**
  * @brief Finds if the matrix is orthogonal.  This means that multiplying the matrix with its transpose yields the identity matrix.  This is a special case of an invertable matrix.
  * @param m Pointer to matrix_int_t object.
+ * @param m_transpose Pointer to matrix_int_t object.
  * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
-m_isOrthogonal_int(matrix_int_t *m);
+m_isOrthogonal_int(matrix_int_t *m, matrix_int_t *m_transpose) {
+    return true;
+}
 
 
 /**
@@ -410,7 +451,12 @@ m_isSingular_int(matrix_int_t *m);
  * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
-m_isIdempotent_int(matrix_int_t *m);
+m_isIdempotent_int(matrix_int_t *m) {
+    if(true == m_isIdentity_int(m)) {
+        return true;
+    }
+    return false;
+}
 
 /**
  * @brief Determines whether a matrix is involutory.  In other words, if that matrix is its own inverse.

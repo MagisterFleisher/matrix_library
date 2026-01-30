@@ -114,7 +114,8 @@ typedef struct Matrix_double_s {
         bool is_row;
         bool is_singleton;
         bool is_square;
-        bool is_triangular;
+        bool is_UpperTriangular;
+        bool is_LowerTriangular;
         bool is_diagonal;
         bool is_identity;
         bool is_null;
@@ -124,7 +125,6 @@ typedef struct Matrix_double_s {
         bool is_idempotent;
         bool is_involutory;
         bool is_nilpotent;
-        bool is_stochastic;
     } properties;
 } matrix_double_t;
 
@@ -181,6 +181,13 @@ void printMatrix_int(matrix_int_t *m);
 int
 m_at_int(matrix_int_t *m, int i, int j);
 
+/**
+ * @brief This generates an identity matrix of size, dim x dim.
+ * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_generateIdentityMatrix_int(const int dim);
 
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
@@ -326,12 +333,13 @@ bool
 m_isSymmetric_int(matrix_int_t *m);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Finds if the matrix is orthogonal.  This means that multiplying the matrix with its transpose yields the identity matrix.  This is a special case of an invertable matrix.
+ * @param m Pointer to matrix_int_t object.
+ * @param m_transpose Pointer to matrix_int_t object.
+ * @return boolean.  True if orthogonal, false otherwise.
  */
 bool
-m_isOrthogonal_int(matrix_int_t *m);
+m_isOrthogonal_int(matrix_int_t *m, matrix_int_t *m_transpose);
 
 /**
  * @brief

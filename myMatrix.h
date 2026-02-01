@@ -149,7 +149,7 @@ typedef struct Matrix_t {
  * @param j The number of columns, i.e. items in each vector
  * @return A pointer to a matrix stuct
  */
-matrix_int_t* initializeMatrix_int(int i, int j);
+matrix_int_t* initializeMatrix_int(const int i, const int j);
 
 /**
  * @brief The matrix_int_t type has two arrays that need to be cleaned up before freeing the memory for the entire struct.
@@ -171,16 +171,15 @@ void copyArrayToMatrix_int(matrix_int_t *m, const int *array, const size_t array
  */
 void printMatrix_int(matrix_int_t *m);
 
-
 /**
  * @brief This function finds the value of the matrix at any given dimension.
  * @param m The matrix
  * @param i The row (i.e. value)
- * @param j The columnTriton Programming Language (i.e. value)
+ * @param j The column (i.e. value)
  * @return Value at that column x row
  */
 int
-m_at_int(matrix_int_t *m, int i, int j);
+m_at_int(matrix_int_t *m, const int i, const int j);
 
 /**
  * @brief This generates an identity matrix of size, dim x dim.

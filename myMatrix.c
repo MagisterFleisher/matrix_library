@@ -7,6 +7,8 @@
  * @todo Find a better way to hold the allocations in memory, perhaps an arena or pool.
  * @todo Use discriminated unions to make an easier way to use matrices of different types
  * @todo Use a better random number generator such as Mersenne twister or openSSL's random number generator
+ * @todo Add a description of the space and time O() values of each function
+ * @todo Ensure const correctness
  */
 #include "myMatrix.h"
 
@@ -20,7 +22,7 @@
  * @return A pointer to a matrix stuct
  */
 matrix_int_t* 
-initializeMatrix_int(int i, int j) {
+initializeMatrix_int(const int i, const int j) {
     matrix_int_t *m = malloc(sizeof(matrix_int_t));
 
     m->i = i;
@@ -90,32 +92,49 @@ printMatrix_int(matrix_int_t *m) {
 /**
  * @brief This function finds the value of the matrix at any given dimension.
  * @param m The matrix
- * @param i The row (i.e. value)
- * @param j The column (i.e. value)
+ * @param i The row index, using C style indexing (starting at 0)
+ * @param j The column index, using C style indexing (starting at 0)
  * @return Value at that column x row
  */
 int
-m_at_int(matrix_int_t *m, int i, int j) {
+m_at_int(matrix_int_t *m, const int i, const int j) {
     return m->array[(i * m->j) + j];
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Returns a specific column from the matrix.  The column numbers use C-style indexing.  The index begins at 0, and continues to m->j -1.  For some constant c, select all i such that M[i][c].  Return an array of integers allocated in the heap with those values.  Do not forget to free this array after use.
+ * @param m matrix_int_t The matrix to select from
+ * @param column_number int The index of the column to select.  This index is C style.  In other words, it begins at 0 and goes up to m->j -1.    This number must be less that m->j.
+ * @return Integer array with all values from the column.
  */
 int*
-m_selectColumn(matrix_int_t *m, int column_number) {
+m_selectColumn(matrix_int_t *m, const int column_number) {
+    assert(0 <= column_number);
+    assert(column_number < m->j);
+    int *column = calloc(m->j, sizeof(int));
+    for(int index = 0; index < m->i; index++) {
+        column[index] = m_at_int(m, index, column_number);
+    }
+    return column;
 }
 
 /**
- * @brief 
- * @param m The matrix
- * @param row_number The second matrix
- * @return A new matrix allocated upon the heap
+ * @brief  This function returns an integer array containing all values from a designated row.  The integer array is allocated on the heap. Do not forget to free this array after use.
+ * @param m matrix_int_t The matrix from which the row will be selected
+ * @param row_number int The row number.  This row number must be less than 
+ * @return An integer array allocated upon the heap
  */
 int*
-m_selectRow_int(matrix_int_t *m1, int row_number) {
+m_selectRow_int(matrix_int_t *m, const int row_number) {
+    assert(0 <= row_number);
+    assert(row_number < m->i);
+
+    int *row = calloc(m->i, sizeof(int));
+    /**
+     * Find the index by multiplying the row_number by the number of columns in the matrix
+     */
+    memcpy(row, m->array + (row_number * m->j), sizeof(int));
+    return row;
 }
 
 /**

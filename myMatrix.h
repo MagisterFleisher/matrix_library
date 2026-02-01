@@ -53,7 +53,8 @@ typedef struct Matrix_int_s {
         bool is_row;
         bool is_singleton;
         bool is_square;
-        bool is_triangular;
+        bool is_Uppertriangular;
+        bool is_Lowertriangular;
         bool is_diagonal;
         bool is_identity;
         bool is_null;
@@ -84,7 +85,8 @@ typedef struct Matrix_float_s {
         bool is_row;
         bool is_singleton;
         bool is_square;
-        bool is_triangular;
+        bool is_Uppertriangular;
+        bool is_Lowertriangular;
         bool is_diagonal;
         bool is_identity;
         bool is_null;
@@ -166,6 +168,25 @@ void freeMatrix_int(matrix_int_t *m);
 void copyArrayToMatrix_int(matrix_int_t *m, const int *array, const size_t array_length);
 
 /**
+ * @brief This generates an identity matrix of size, dim x dim.
+ * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+generateIdentityMatrix_int(const int dim);
+
+/**
+ * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
+ * @param i the number of rows in the matrix.
+ * @param j the number of columns in the matrix.
+ * @param lower_bound All values in the matrix are greater than or equal to this lower bound.
+ * @param upper_bound All values in the matrix are less than or equal to this upper bound. 
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound);
+
+/**
  * @brief Prints the matrix to stdout in the appropriate dimensions
  * @param m matrix_int_t.  The matrix struct holding the array and all metadata
  */
@@ -181,7 +202,6 @@ void printMatrix_int(matrix_int_t *m);
 int
 m_at_int(matrix_int_t *m, const int i, const int j);
 
-
 /**
  * @brief Returns a specific column from the matrix.  The column numbers use C-style indexing.  The index begins at 0, and continues to m->j -1.  For some constant c, select all i such that M[i][c].  Return an array of integers allocated in the heap with those values.  Do not forget to free this array after use.
  * @param m matrix_int_t The matrix to select from
@@ -190,6 +210,7 @@ m_at_int(matrix_int_t *m, const int i, const int j);
  */
 int*
 m_selectColumn_int(matrix_int_t *m, const int column_number);
+
 /**
  * @brief  This function returns an integer array containing all values from a designated row.  The integer array is allocated on the heap. Do not forget to free this array after use.
  * @param m matrix_int_t The matrix from which the row will be selected
@@ -201,24 +222,21 @@ m_selectRow_int(matrix_int_t *m, const int row_number);
 
 
 /**
- * @brief This generates an identity matrix of size, dim x dim.
- * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
- * @return A new matrix allocated upon the heap
+ * @brief This function performs scalar matrix addition.  It modifies the matrix passed to the function
+ * @param m matrix_int_t The matrix
+ * @param scalar const int The 
  */
-matrix_int_t*
-m_generateIdentityMatrix_int(const int dim);
+void
+m_ScalarAdd_int(matrix_int_t *m, const int scalar);
 
 /**
- * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
- * @param i the number of rows in the matrix.
- * @param j the number of columns in the matrix.
- * @param lower_bound All values in the matrix are greater than or equal to this lower bound.
- * @param upper_bound All values in the matrix are less than or equal to this upper bound. 
+ * @brief This function performs matrix addition, M1 + M2.  The result will be a new matrix struct allocated upon the heap.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound);
-
+m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2);
 
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.

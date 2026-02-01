@@ -13,7 +13,7 @@
 #include "myMatrix.h"
 
 
-/*************************** MATRIX OPERATIONS ************************/
+/*************************** MATRIX WIDE OPERATIONS ************************/
 
 /**
  * @brief Allocates a place in the heap for the matrix of dimensions i, columns, by j, rows 
@@ -47,7 +47,6 @@ freeMatrix_int(matrix_int_t *m) {
     free(m->properties.eigenvector);
     free(m);
 }
-
 
 /**
  * @brief This function copies an array into the array of the matrix struct.  The array must be the length of the full size (i * j) of the matrix;
@@ -88,6 +87,101 @@ printMatrix_int(matrix_int_t *m) {
     (void) printf("\tisDiagonal: %d\n", m_isDiagonal_int(m));
     (void) printf("\n");
 }
+
+
+/**
+ * @brief This generates an identity matrix of size, dim x dim.
+ * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+generateIdentityMatrix_int(const int dim) {
+    assert(dim > 0);
+    matrix_int_t *identity_matrix = initializeMatrix_int(dim, dim);
+    for(int index = 0; index < (dim * dim); index++) {
+        identity_matrix->array[index] = 0;
+    }
+    for(int index = 0; index < dim; index++) {
+        identity_matrix->array[(index * index)] = 1;
+    }
+    identity_matrix->properties.is_identity = true;
+    
+    identity_matrix->properties.determinant = 1;
+    identity_matrix->properties.is_binary = true;
+    
+    if(1 == dim) {
+        identity_matrix->properties.is_column = true;
+        identity_matrix->properties.is_row = true;
+        identity_matrix->properties.is_singleton = true;
+    } else {
+        identity_matrix->properties.is_column = false;
+        identity_matrix->properties.is_row = false;
+        identity_matrix->properties.is_singleton = false;
+    }
+
+    identity_matrix->properties.is_diagonal = true;
+    identity_matrix->properties.is_square = true;
+    identity_matrix->properties.is_identity = true;
+    identity_matrix->properties.is_idempotent = true;
+    identity_matrix->properties.is_null = false;
+    identity_matrix->properties.is_involutory = true;
+
+    return identity_matrix;
+}
+
+/**
+ * @brief Creates a new integer matrix in the heap using the contents of another matrix
+ * @param m matrix_int_t The matrix to copy
+ * @return matrix_int_t matrix in the heap
+ */
+matrix_int_t*
+createCopy_int(matrix_int_t *m) {
+    assert(m != NULL);
+    matrix_int_t *m2 = initializeMatrix_int(m->i, m->j);
+    memcpy(m2->array, m->array, (m->i * m->j) * sizeof(int));
+    m2->properties.determinant = m->properties.determinant;
+    m2->properties.dot_product = m->properties.dot_product;
+    memcpy(m2->properties.eigenvector, m->properties.eigenvector, m->j * sizeof(complex));
+    m2->properties.is_binary = m->properties.is_binary;
+    m2->properties.is_column = m->properties.is_column;
+    m2->properties.is_diagonal = m->properties.is_diagonal;
+    m2->properties.is_idempotent = m->properties.is_idempotent;
+    m2->properties.is_identity = m->properties.is_identity;
+    m2->properties.is_involutory = m->properties.is_involutory;
+    m2->properties.is_nilpotent = m->properties.is_nilpotent;
+    m2->properties.is_null = m->properties.is_null;
+    m2->properties.is_orthoganal = m->properties.is_orthoganal;
+    m2->properties.is_row = m->properties.is_row;
+    m2->properties.is_singleton = m->properties.is_singleton;
+    m2->properties.is_singular = m->properties.is_singular;
+    m2->properties.is_square = m->properties.is_square;
+    m2->properties.is_stochastic = m->properties.is_stochastic;
+    m2->properties.is_symmetric = m->properties.is_symmetric;
+    m2->properties.is_Lowertriangular = m->properties.is_Lowertriangular;
+    m2->properties.is_Uppertriangular = m->properties.is_Uppertriangular;
+    return m2;
+}
+
+/**
+ * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
+ * @param i integer the number of rows in the matrix.
+ * @param j integer the number of columns in the matrix.
+ * @param lower_bound integer All values in the matrix are greater than or equal to this lower bound.
+ * @param upper_bound integer All values in the matrix are less than or equal to this upper bound. 
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound) { 
+    matrix_int_t *m = initializeMatrix_int(i, j);
+    srand(time(0));
+    for(int index = 0; index < (m->i * m->j); index++) {
+        m->array[index] = rand() % ((upper_bound - lower_bound) +1) + lower_bound;
+    }
+    return m;
+}
+
+
+/******************************* INTERNAL MATRIX OPERATIONS **********************/
 
 /**
  * @brief This function finds the value of the matrix at any given dimension.
@@ -137,65 +231,19 @@ m_selectRow_int(matrix_int_t *m, const int row_number) {
     return row;
 }
 
-/**
- * @brief This generates an identity matrix of size, dim x dim.
- * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
- * @return A new matrix allocated upon the heap
- */
-matrix_int_t*
-m_generateIdentityMatrix_int(const int dim) {
-    assert(dim > 0);
-    matrix_int_t *identity_matrix = initializeMatrix_int(dim, dim);
-    for(int index = 0; index < (dim * dim); index++) {
-        identity_matrix->array[index] = 0;
-    }
-    for(int index = 0; index < dim; index++) {
-        identity_matrix->array[(index * index)] = 1;
-    }
-    identity_matrix->properties.is_identity = true;
-    
-    identity_matrix->properties.determinant = 1;
-    identity_matrix->properties.is_binary = true;
-    
-    if(1 == dim) {
-        identity_matrix->properties.is_column = true;
-        identity_matrix->properties.is_row = true;
-        identity_matrix->properties.is_singleton = true;
-    } else {
-        identity_matrix->properties.is_column = false;
-        identity_matrix->properties.is_row = false;
-        identity_matrix->properties.is_singleton = false;
-    }
-
-    identity_matrix->properties.is_diagonal = true;
-    identity_matrix->properties.is_square = true;
-    identity_matrix->properties.is_identity = true;
-    identity_matrix->properties.is_idempotent = true;
-    identity_matrix->properties.is_null = false;
-    identity_matrix->properties.is_involutory = true;
-
-    return identity_matrix;
-}
-
 
 /**
- * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
- * @param i integer the number of rows in the matrix.
- * @param j integer the number of columns in the matrix.
- * @param lower_bound integer All values in the matrix are greater than or equal to this lower bound.
- * @param upper_bound integer All values in the matrix are less than or equal to this upper bound. 
- * @return A new matrix allocated upon the heap
+ * @brief This function performs scalar matrix addition.  It modifies the matrix passed to the function
+ * @param m matrix_int_t The matrix
+ * @param scalar const int The 
  */
-matrix_int_t*
-m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound) { 
-    matrix_int_t *m = initializeMatrix_int(i, j);
-    srand(time(0));
-    for(int index = 0; index < (m->i * m->j); index++) {
-        m->array[index] = rand() % ((upper_bound - lower_bound) +1) + lower_bound;
+void
+m_ScalarAdd_int(matrix_int_t *m, const int scalar) {
+    assert(NULL != m);
+    for(size_t index = 0; index < (m->i * m->j); index++) {
+        m->array[index] += scalar;
     }
-    return m;
 }
-
 
 /**
  * @brief This function performs matrix addition, M1 + M2.  The result will be a new matrix struct allocated upon the heap.
@@ -204,7 +252,7 @@ m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, cons
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_add_int(matrix_int_t *m1, matrix_int_t *m2) {
+m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2) {
     assert((m1->i == m2->i) && (m1->j == m2->j));
     matrix_int_t *m = initializeMatrix_int(m1->i, m2->j);
     for(size_t index = 0; index < (m1->i * m1->j); index++) {

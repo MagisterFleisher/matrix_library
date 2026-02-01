@@ -181,6 +181,25 @@ void printMatrix_int(matrix_int_t *m);
 int
 m_at_int(matrix_int_t *m, const int i, const int j);
 
+
+/**
+ * @brief Returns a specific column from the matrix.  The column numbers use C-style indexing.  The index begins at 0, and continues to m->j -1.  For some constant c, select all i such that M[i][c].  Return an array of integers allocated in the heap with those values.  Do not forget to free this array after use.
+ * @param m matrix_int_t The matrix to select from
+ * @param column_number int The index of the column to select.  This index is C style.  In other words, it begins at 0 and goes up to m->j -1.    This number must be less that m->j.
+ * @return Integer array with all values from the column.
+ */
+int*
+m_selectColumn_int(matrix_int_t *m, const int column_number);
+/**
+ * @brief  This function returns an integer array containing all values from a designated row.  The integer array is allocated on the heap. Do not forget to free this array after use.
+ * @param m matrix_int_t The matrix from which the row will be selected
+ * @param row_number int The row number.  This row number must be less than 
+ * @return An integer array allocated upon the heap
+ */
+int*
+m_selectRow_int(matrix_int_t *m, const int row_number);
+
+
 /**
  * @brief This generates an identity matrix of size, dim x dim.
  * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.

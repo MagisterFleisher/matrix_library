@@ -108,7 +108,7 @@ m_at_int(matrix_int_t *m, const int i, const int j) {
  * @return Integer array with all values from the column.
  */
 int*
-m_selectColumn(matrix_int_t *m, const int column_number) {
+m_selectColumn_int(matrix_int_t *m, const int column_number) {
     assert(0 <= column_number);
     assert(column_number < m->j);
     int *column = calloc(m->j, sizeof(int));
@@ -133,7 +133,7 @@ m_selectRow_int(matrix_int_t *m, const int row_number) {
     /**
      * Find the index by multiplying the row_number by the number of columns in the matrix
      */
-    memcpy(row, m->array + (row_number * m->j), sizeof(int));
+    memcpy(row, m->array + (row_number * m->j), m->j * sizeof(int));
     return row;
 }
 

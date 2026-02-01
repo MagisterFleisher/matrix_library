@@ -34,10 +34,25 @@ main(int argument_count, char **argument_vector) {
     copyArrayToMatrix_int(m2, matrix_array2, 9);
     printMatrix_int(m2);
 
+    int *column2_matrix2 = m_selectColumn_int(m2, 1);
+    (void) printf("\nColumn 2 of matrix 2: ");
+    for(int index = 0; index < m->i; index++) {
+        (void) printf("%d ", column2_matrix2[index]);
+    }
+    (void) printf("\n");
+    free(column2_matrix2);
+
+    int *row2_matrix2 = m_selectRow_int(m2, 1);
+    (void) printf("\nRow 2 of matrix 2: ");
+    for(int index = 0; index < m->j; index++) {
+        (void) printf("%d ", row2_matrix2[index]);
+    }
+    (void) printf("\n");
+    free(row2_matrix2);
+
     matrix_int_t *test_multiplication = m_multiply_int(m, m2);
 
     printMatrix_int(test_multiplication);
-
 
     const int matrix_array3[9] = {1, 0, 1,
                             1, 1, 1,

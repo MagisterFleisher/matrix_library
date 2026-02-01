@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <string.h>
+#include <time.h>
 
 /**
  * @note Not all matrices have eigenvectors in the real numbers.  But, all matrices have eigenvectors if one expands the field to the complex numbers.
@@ -188,6 +189,18 @@ m_at_int(matrix_int_t *m, int i, int j);
  */
 matrix_int_t*
 m_generateIdentityMatrix_int(const int dim);
+
+/**
+ * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
+ * @param i the number of rows in the matrix.
+ * @param j the number of columns in the matrix.
+ * @param lower_bound All values in the matrix are greater than or equal to this lower bound.
+ * @param upper_bound All values in the matrix are less than or equal to this upper bound. 
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound);
+
 
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.

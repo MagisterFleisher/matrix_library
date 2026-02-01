@@ -6,6 +6,7 @@
  * 
  * @todo Find a better way to hold the allocations in memory, perhaps an arena or pool.
  * @todo Use discriminated unions to make an easier way to use matrices of different types
+ * @todo Use a better random number generator such as Mersenne twister or openSSL's random number generator
  */
 #include "myMatrix.h"
 
@@ -99,6 +100,25 @@ m_at_int(matrix_int_t *m, int i, int j) {
 }
 
 /**
+ * @brief
+ * @param
+ * @return
+ */
+int*
+m_selectColumn(matrix_int_t *m, int column_number) {
+}
+
+/**
+ * @brief 
+ * @param m The matrix
+ * @param row_number The second matrix
+ * @return A new matrix allocated upon the heap
+ */
+int*
+m_selectRow_int(matrix_int_t *m1, int row_number) {
+}
+
+/**
  * @brief This generates an identity matrix of size, dim x dim.
  * @param dim the number of rows and columns in the matrix.  All identity matrices are square.  So, the function requires only one number to define the size of the matrix.
  * @return A new matrix allocated upon the heap
@@ -134,7 +154,82 @@ m_generateIdentityMatrix_int(const int dim) {
     identity_matrix->properties.is_idempotent = true;
     identity_matrix->properties.is_null = false;
     identity_matrix->properties.is_involutory = true;
+
     return identity_matrix;
+}
+
+
+/**
+ * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
+ * @param i the number of rows in the matrix.
+ * @param j the number of columns in the matrix.
+ * @param lower_bound All values in the matrix are greater than or equal to this lower bound.
+ * @param upper_bound All values in the matrix are less than or equal to this upper bound. 
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound) {
+    struct timespec ts;
+    if(TIME_UTC != timespec_get(&ts, TIME_UTC)) {
+        (void) printf("Failed to generate a precise time to use to seed random number generator.");
+        exit(-1);
+    }
+    matrix_int_t *m = initializeMatrix_int(i, j);
+
+
+    return m;
+}
+
+
+/**
+ * @brief This function performs matrix addition, M1 + M2.  The result will be a new matrix struct allocated upon the heap.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_add_int(matrix_int_t *m1, matrix_int_t *m2) {
+    assert((m1->i == m2->i) && (m1->j == m2->j));
+    matrix_int_t *m = initializeMatrix_int(m1->i, m2->j);
+    for(size_t index = 0; index < (m1->i * m1->j); index++) {
+        m->array[index] = m1->array[index] + m2->array[index];
+    }
+    return m;
+}
+
+/**
+ * @brief This function performs matrix subtraction, M1 + M2.  The result will be a new matrix struct allocated upon the heap.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_subtract_int(matrix_int_t *m1, matrix_int_t *m2) {
+    assert((m1->i == m2->i) && (m1->j == m2->j));
+    matrix_int_t *m = initializeMatrix_int(m1->i, m2->j);
+    for(size_t index = 0; index < (m1->i * m1->j); index++) {
+        m->array[index] = m1->array[index] - m2->array[index];
+    }
+    return m;
+}
+
+/**
+ * @brief This checks if the values of two matrices, M1 and M2, are equal.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
+ * @return boolean. True if matrices are equal, false otherwise
+ */
+bool
+m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2) {
+    if((m1->i != m2->i) || (m1->j != m2->j)) {
+        return false;
+    }
+    for(size_t index = 0; index < (m1->i * m1->j); index++) {
+        if(m1->array[index] != m2->array[index]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
@@ -414,7 +509,10 @@ m_isNull_int(matrix_int_t *m) {
  * @return boolean.  True if symmetric, false otherwise.
  */
 bool
-m_isSymmetric_int(matrix_int_t *m);
+m_isSymmetric_int(matrix_int_t *m) {
+    assert(m_isSquare_int(m));
+
+}
 
 /**
  * @brief Finds if the matrix is invertible.  This means that this matrix can be multiplied by another matrix to yield the identity matrix.

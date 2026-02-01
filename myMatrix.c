@@ -180,22 +180,19 @@ m_generateIdentityMatrix_int(const int dim) {
 
 /**
  * @brief This generates an random matrix of size, i x j, with values lower_bound <= x <= upper_bound
- * @param i the number of rows in the matrix.
- * @param j the number of columns in the matrix.
- * @param lower_bound All values in the matrix are greater than or equal to this lower bound.
- * @param upper_bound All values in the matrix are less than or equal to this upper bound. 
+ * @param i integer the number of rows in the matrix.
+ * @param j integer the number of columns in the matrix.
+ * @param lower_bound integer All values in the matrix are greater than or equal to this lower bound.
+ * @param upper_bound integer All values in the matrix are less than or equal to this upper bound. 
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound) {
-    struct timespec ts;
-    if(TIME_UTC != timespec_get(&ts, TIME_UTC)) {
-        (void) printf("Failed to generate a precise time to use to seed random number generator.");
-        exit(-1);
-    }
+m_generateRandomMatrix_int(const int i, const int j, const int lower_bound, const int upper_bound) { 
     matrix_int_t *m = initializeMatrix_int(i, j);
-
-
+    srand(time(0));
+    for(int index = 0; index < (m->i * m->j); index++) {
+        m->array[index] = rand() % ((upper_bound - lower_bound) +1) + lower_bound;
+    }
     return m;
 }
 

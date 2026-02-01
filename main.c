@@ -86,6 +86,12 @@ main(int argument_count, char **argument_vector) {
     matrix_int_t *test_multiplication3 = m_multiply_int(m2, m4);
     printMatrix_int(test_multiplication3);
 
+
+    matrix_int_t *random_matrix = m_generateRandomMatrix_int(4, 4, 0, 100);
+    printMatrix_int(random_matrix);
+
+    
+    freeMatrix_int(random_matrix);
     freeMatrix_int(test_multiplication3);
     freeMatrix_int(test_multiplication2);
     freeMatrix_int(m7);

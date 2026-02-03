@@ -527,18 +527,20 @@ m_isUpperTriangular_int(matrix_int_t *m) {
     if(false == m_isSquare_int(m)) {
         return false;
     }
-    size_t i_index = 0;
-    size_t j_index = 0;
-    while((i_index < m->i) && (j_index < m->j)) {
-        if(i_index >= j_index) {
-            j_index++;
-            if(0 != m_at_int(m, i_index, j_index)) {
+    
+
+    /**
+     * Go through each row, except the first.  There's nothing to check in the first line.
+     * The items from the first until the middle (i.e. the current row number) should be zero.
+     */
+    for(size_t row_index = 1; row_index < m->i; row_index++) {
+        for(size_t column_index = 0; column_index < row_index; column_index++) {
+            if(0 != m_at_int(m, row_index, column_index)) {
                 return false;
             }
-        } else {
-            i_index++;
         }
     }
+
     /* The function would only reach this return if it has encountered no instance not indicative of an upper triangular matrix. */
     return true;
 }

@@ -13,6 +13,8 @@ This library is an educational project by the repository owner.  It will be the 
 
 ## State of Development
 
+The library only has linux development in mind.  Future development may include versions specifically for OS X and/or Windows.
+
 This library is currently be developed only by the owner.  However, feel free to use the code.  But give credit where credit is due, please.
 
 ## Plans for Future Development

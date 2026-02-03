@@ -98,12 +98,29 @@ matrix_int_t*
 generateIdentityMatrix_int(const int dim) {
     assert(dim > 0);
     matrix_int_t *identity_matrix = initializeMatrix_int(dim, dim);
-    for(int index = 0; index < (dim * dim); index++) {
-        identity_matrix->array[index] = 0;
+
+    /**
+     * To find the place to insert the 1 value, 
+     * the algorithm must increase the column position by one per row.
+     * This library uses an array for all values,
+     * so we must keep track of the row number and column number
+     * seperately than the index value.  To do this simply,
+     * a modulo operation can help.  This will require only one extra variable,
+     * an column position index value.
+     */
+    unsigned int column_position = 0;
+    unsigned int array_index = 0;
+    while(array_index < (dim * dim)) {
+        if((array_index % dim) == column_position) {
+            identity_matrix->array[array_index] = 1;
+            column_position++;
+            array_index++; /* Have to move the array index up one more in order to get past the modulo.  Otherwise, it turns into all 1s on the first row and 0s elsewhere. */
+        } else {
+            identity_matrix->array[array_index] = 0;
+        }
+        array_index++;
     }
-    for(int index = 0; index < dim; index++) {
-        identity_matrix->array[(index * index)] = 1;
-    }
+
     identity_matrix->properties.is_identity = true;
     
     identity_matrix->properties.determinant = 1;
@@ -157,8 +174,8 @@ createCopy_int(matrix_int_t *m) {
     m2->properties.is_square = m->properties.is_square;
     m2->properties.is_stochastic = m->properties.is_stochastic;
     m2->properties.is_symmetric = m->properties.is_symmetric;
-    m2->properties.is_Lowertriangular = m->properties.is_Lowertriangular;
-    m2->properties.is_Uppertriangular = m->properties.is_Uppertriangular;
+    m2->properties.is_LowerTriangular = m->properties.is_LowerTriangular;
+    m2->properties.is_UpperTriangular = m->properties.is_UpperTriangular;
     return m2;
 }
 
@@ -261,6 +278,20 @@ m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2) {
     return m;
 }
 
+
+/**
+ * @brief This function performs scalar matrix subtraction.  It modifies the matrix passed to the function
+ * @param m matrix_int_t The matrix
+ * @param scalar const int The scalar used for subtraction 
+ */
+void
+m_ScalarSubtract_int(matrix_int_t *m, const int scalar) {
+    assert(NULL != m);
+    for(size_t index = 0; index < (m->i * m->j); index++) {
+        m->array[index] -= scalar;
+    }
+}
+
 /**
  * @brief This function performs matrix subtraction, M1 + M2.  The result will be a new matrix struct allocated upon the heap.
  * @param m1 The first matrix
@@ -268,7 +299,7 @@ m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2) {
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_subtract_int(matrix_int_t *m1, matrix_int_t *m2) {
+m_MatrixSubtract_int(matrix_int_t *m1, matrix_int_t *m2) {
     assert((m1->i == m2->i) && (m1->j == m2->j));
     matrix_int_t *m = initializeMatrix_int(m1->i, m2->j);
     for(size_t index = 0; index < (m1->i * m1->j); index++) {
@@ -296,6 +327,20 @@ m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2) {
     return true;
 }
 
+
+/**
+ * @brief This function performs scalar matrix multiplication.  It modifies the matrix passed to the function
+ * @param m matrix_int_t The matrix
+ * @param scalar const int The scalar used for multiplication 
+ */
+void
+m_ScalarMultiply_int(matrix_int_t *m, const int scalar) {
+    assert(NULL != m);
+    for(size_t index = 0; index < (m->i * m->j); index++) {
+        m->array[index] *= scalar;
+    }
+}
+
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
  * @param m1 The first matrix
@@ -303,10 +348,10 @@ m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2) {
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_multiply_int(matrix_int_t *m1, matrix_int_t *m2) {
+m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
     assert(m1->j == m2->i);
     /** The matrix result with have m1->rows and m2->columns */
-    matrix_int_t *m = initializeMatrix_int(m1->i, m2->j);
+    matrix_int_t *m = initializeMatrix_int(m1->j, m2->i);
     /**
      * Take dot product of first row of first matrix 
      *      and first column of second matrix.

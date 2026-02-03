@@ -53,8 +53,8 @@ typedef struct Matrix_int_s {
         bool is_row;
         bool is_singleton;
         bool is_square;
-        bool is_Uppertriangular;
-        bool is_Lowertriangular;
+        bool is_UpperTriangular;
+        bool is_LowerTriangular;
         bool is_diagonal;
         bool is_identity;
         bool is_null;
@@ -85,8 +85,8 @@ typedef struct Matrix_float_s {
         bool is_row;
         bool is_singleton;
         bool is_square;
-        bool is_Uppertriangular;
-        bool is_Lowertriangular;
+        bool is_UpperTriangular;
+        bool is_LowerTriangular;
         bool is_diagonal;
         bool is_identity;
         bool is_null;
@@ -238,6 +238,42 @@ m_ScalarAdd_int(matrix_int_t *m, const int scalar);
 matrix_int_t*
 m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2);
 
+
+/**
+ * @brief This function performs scalar matrix subtraction.  It modifies the matrix passed to the function
+ * @param m matrix_int_t The matrix
+ * @param scalar const int The scalar used for subtraction 
+ */
+void
+m_ScalarSubtract_int(matrix_int_t *m, const int scalar);
+
+/**
+ * @brief This function performs matrix subtraction, M1 + M2.  The result will be a new matrix struct allocated upon the heap.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_MatrixSubtract_int(matrix_int_t *m1, matrix_int_t *m2);
+
+
+/**
+ * @brief This checks if the values of two matrices, M1 and M2, are equal.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
+ * @return boolean. True if matrices are equal, false otherwise
+ */
+bool
+m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2);
+
+/**
+ * @brief This function performs scalar matrix multiplication.  It modifies the matrix passed to the function
+ * @param m matrix_int_t The matrix
+ * @param scalar const int The scalar used for multiplication 
+ */
+void
+m_ScalarMultiply_int(matrix_int_t *m, const int scalar);
+
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
  * @param m1 The first matrix
@@ -245,8 +281,7 @@ m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2);
  * @return A new matrix allocated upon the heap
  */
 matrix_int_t*
-m_multiply_int(matrix_int_t *m1, matrix_int_t *m2);
-
+m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2);
 
 /**
  * @brief

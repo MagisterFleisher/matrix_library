@@ -25,6 +25,7 @@ main(int argument_count, char **argument_vector) {
                         7, 8, 9};
     copyArrayToMatrix_int(m, matrix_array, 9);
 
+    (void) printf("\tMatrix1: \n");
     printMatrix_int(m);
     (void) printf("At m[2, 1] : %d\n", m_at_int(m, 1,0));
 
@@ -32,6 +33,7 @@ main(int argument_count, char **argument_vector) {
                             4, 5, 6,
                             7, 8, 9};
     copyArrayToMatrix_int(m2, matrix_array2, 9);
+    (void) printf("\tMatrix 2:\n");
     printMatrix_int(m2);
 
     int *column2_matrix2 = m_selectColumn_int(m2, 1);
@@ -50,47 +52,66 @@ main(int argument_count, char **argument_vector) {
     (void) printf("\n");
     free(row2_matrix2);
 
-    matrix_int_t *test_multiplication = m_multiply_int(m, m2);
-
+    matrix_int_t *test_multiplication = m_MatrixMultiply_int(m, m2);
+    (void) printf("\tTest multiplication of matrix 1 X matrix 2: \n");
     printMatrix_int(test_multiplication);
 
     const int matrix_array3[9] = {1, 0, 1,
                             1, 1, 1,
                             0, 1, 0};
     copyArrayToMatrix_int(m3, matrix_array3, 9);
+    (void) printf("\tMatrix 3:\n");
     printMatrix_int(m3);
 
     const int matrix_array4[9] = {1, 0, 0,
                             0, 1, 0,
                             0, 0, 1};
     copyArrayToMatrix_int(m4, matrix_array4, 9);
+    (void) printf("\tMatrix 4:\n");
     printMatrix_int(m4);
 
     const int matrix_array5[3] = {1, 0, 0};
     copyArrayToMatrix_int(m5, matrix_array5, 3);
+    (void) printf("\tMatrix 5:\n");
     printMatrix_int(m5);
 
     const int matrix_array6[3] = {1, 
                                 0, 
                                 0};
     copyArrayToMatrix_int(m6, matrix_array6, 3);
+    (void) printf("\tMatrix 6:\n");
     printMatrix_int(m6);
+
+
 
     const int matrix_array7[1] = {1};
     copyArrayToMatrix_int(m7, matrix_array7, 1);
+    (void) printf("\tMatrix 7:\n");
     printMatrix_int(m7);
 
-    matrix_int_t *test_multiplication2 = m_multiply_int(m4, m2);
+    matrix_int_t *test_multiplication2 = m_MatrixMultiply_int(m4, m2);
+    (void) printf("\tTest multiplication m4 x m2\n");
     printMatrix_int(test_multiplication2);
 
-    matrix_int_t *test_multiplication3 = m_multiply_int(m2, m4);
+    matrix_int_t *test_multiplication3 = m_MatrixMultiply_int(m2, m4);
+    (void) printf("\tTest multiplication m2 x m4");
     printMatrix_int(test_multiplication3);
 
 
-    matrix_int_t *random_matrix = m_generateRandomMatrix_int(4, 4, 0, 100);
+    matrix_int_t *random_matrix = generateRandomMatrix_int(4, 4, 0, 100);
+    (void) printf("\tTest random matrix 4 x 4, values 0 to 100:\n");
     printMatrix_int(random_matrix);
 
-    
+    matrix_int_t *test_multiplication4 = m_MatrixMultiply_int(m, m4);
+    (void) printf("\tTest multiplication m1 x m4:\n");
+    printMatrix_int(test_multiplication4);
+
+    matrix_int_t *test_identity_m = generateIdentityMatrix_int(4);
+    (void) printf("\tTest Generate identity matrix, 4 x 4:\n");
+    printMatrix_int(test_identity_m);
+
+    freeMatrix_int(test_identity_m);
+    freeMatrix_int(test_multiplication4);
     freeMatrix_int(random_matrix);
     freeMatrix_int(test_multiplication3);
     freeMatrix_int(test_multiplication2);

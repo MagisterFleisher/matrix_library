@@ -351,6 +351,12 @@ matrix_int_t*
 m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
     assert(m1->j == m2->i);
     /** The matrix result with have m1->rows and m2->columns */
+    if(m1->properties.is_identity) {
+        return createCopy_int(m2);
+    }
+    if(m2->properties.is_identity) {
+        return createCopy_int(m1);
+    }
     matrix_int_t *m = initializeMatrix_int(m1->j, m2->i);
     /**
      * Take dot product of first row of first matrix 
@@ -376,6 +382,7 @@ m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
             result_array_index++;
         }
     }
+
     return m;
 }
 

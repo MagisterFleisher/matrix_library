@@ -20,3 +20,5 @@ This library is currently be developed only by the owner.  However, feel free to
 ## Plans for Future Development
 
 The next stage of development for this library would be to make it a front end for an optimized BLAS library.  The owner of the repository plans on using the BLIS library: https://github.com/flame/blis
+
+Another aspect of this library that deserves special consideration would be implementing sparse matrix representation and optimizations.

@@ -103,26 +103,26 @@ main(int argument_count, char **argument_vector) {
     (void) printf("\tTest random matrix 1k x 1k, values 0 to 100:\n");
     printMatrix_int(random_matrix2);
 
-    matrix_int_t *big_multiplication = generateRandomMatrix_int(1000, 1000, 0, 100);
+/*     matrix_int_t *big_multiplication = generateRandomMatrix_int(1000, 1000, 0, 100);
     matrix_int_t *test_multiplication4 = m_MatrixMultiply_int(random_matrix2, big_multiplication);
     (void) printf("\tTest multiplication of two 1k x 1k matrices:\n");
     printMatrix_int(test_multiplication4);
+    (void) printf("\tTesting big identity multiplication...");
+    matrix_int_t *big_identity = generateIdentityMatrix_int(1000);
+    matrix_int_t *big_multiplication_identity = m_MatrixMultiply_int(big_identity, big_multiplication);
+    (void) printf("\tTested big identity multiplication\n");
     
-    matrix_int_t *test_identity_m = generateIdentityMatrix_int(4);
+ */    matrix_int_t *test_identity_m = generateIdentityMatrix_int(4);
     (void) printf("\tTest Generate identity matrix, 4 x 4:\n");
     printMatrix_int(test_identity_m);
 
-    (void) printf("\tTesting big identity multiplication...");
-    matrix_int_t *big_identity = generateIdentityMatrix_int(1000);
-    matrix_int_t *big_multiplication_identity = m_MatrixMultiply_int(big_multiplication, big_identity);
-    (void) printf("\tTested big identity multiplication\n");
-    
+/* 
     freeMatrix_int(big_identity);
     freeMatrix_int(big_multiplication_identity);
     
     freeMatrix_int(big_multiplication);
     freeMatrix_int(test_multiplication4);
-
+ */
 
     freeMatrix_int(random_matrix);
     freeMatrix_int(random_matrix2);

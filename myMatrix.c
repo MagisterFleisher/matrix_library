@@ -586,13 +586,33 @@ m_isDiagonal_int(matrix_int_t *m) {
  */
 bool
 m_isIdentity_int(matrix_int_t *m) {
-    if(!m_isBinary_int(m) || !(m_isDiagonal_int(m))) {
+    if(!m_isBinary_int(m)) {
         return false;
     }
-    for(int index = 0; index < m->i; index++) {
-        if(1 != m_at_int(m, index, index)) {
-            return false;
+    /**
+     * To find the place which should have a 1 value, 
+     * the algorithm must increase the column position by one per row.
+     * This library uses an array for all values,
+     * so we must keep track of the row number and column number
+     * seperately than the index value.  To do this simply,
+     * a modulo operation can help.  This will require only one extra variable,
+     * an column position index value.
+     */
+    unsigned int column_position = 0;
+    unsigned int array_index = 0;
+    while(array_index < (m->i * m->j)) {
+        if((array_index % m->j) == column_position) {
+            if(1 != m->array[array_index]) {
+                return false;
+            }
+            column_position++;
+            array_index++; /* Have to move the array index up one more in order to get past the modulo.  Otherwise, it turns into all 1s on the first row and 0s elsewhere. */
+        } else {
+            if(0 != m->array[array_index]) {
+                return false;
+            }
         }
+        array_index++;
     }
     return true;
 }

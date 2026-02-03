@@ -6,3 +6,15 @@ The library seeks to minimize memory footprint from first principles. Matrix rep
 
 If optimizations through characterization heuristics and encoding happen automatically upon use, then layers placed upon the use of this library need not be as concerned with *premature optimization*.
 
+
+## Intent of project
+
+This library is an educational project by the repository owner.  It will be the basis for a machine learning library.
+
+## State of Development
+
+This library is currently be developed only by the owner.  However, feel free to use the code.  But give credit where credit is due, please.
+
+## Plans for Future Development
+
+The next stage of development for this library would be to make it a front end for an optimized BLAS library.  The owner of the repository plans on using the BLIS library: https://github.com/flame/blis

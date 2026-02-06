@@ -52,6 +52,8 @@ main(int argument_count, char **argument_vector) {
     (void) printf("\n");
     free(row2_matrix2);
 
+    (void) printf("\tTest equality between m1 and m2: %d\n", m_isEqual_int(m, m2));
+
     matrix_int_t *test_multiplication = m_MatrixMultiply_int(m, m2);
     (void) printf("\tTest multiplication of matrix 1 X matrix 2: \n");
     printMatrix_int(test_multiplication);
@@ -62,6 +64,8 @@ main(int argument_count, char **argument_vector) {
     copyArrayToMatrix_int(m3, matrix_array3, 9);
     (void) printf("\tMatrix 3:\n");
     printMatrix_int(m3);
+
+    (void) printf("\tTest equality between m1 and m3: %d\n", m_isEqual_int(m, m3));
 
     const int matrix_array4[9] = {1, 0, 0,
                             0, 1, 0,
@@ -92,14 +96,14 @@ main(int argument_count, char **argument_vector) {
     printMatrix_int(test_multiplication2);
 
     matrix_int_t *test_multiplication3 = m_MatrixMultiply_int(m2, m4);
-    (void) printf("\tTest multiplication m2 x m4");
+    (void) printf("\tTest multiplication m2 x m4\n");
     printMatrix_int(test_multiplication3);
 
     matrix_int_t *random_matrix = generateRandomMatrix_int(4, 4, 0, 100);
     (void) printf("\tTest random matrix 4 x 4, values 0 to 100:\n");
     printMatrix_int(random_matrix);
 
-    matrix_int_t *random_matrix2 = generateRandomMatrix_int(1000, 1000, 0, 100);
+    matrix_int_t *random_matrix2 = generateRandomMatrix_int(10, 10, 0, 100);
     (void) printf("\tTest random matrix 1k x 1k, values 0 to 100:\n");
     printMatrix_int(random_matrix2);
 

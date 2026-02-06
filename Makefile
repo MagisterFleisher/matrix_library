@@ -1,21 +1,17 @@
-matrix2 : main.c main.o myMatrix.c myMatrix.h myMatrix.o
-	cc -o matrix1 main.o myMatrix.o -Wall -O0 -Wpedantic -lm -fsanitize=address -g
+CC = cc
+CFLAGS = -Wall -O0 -Wpedantic -lm -fsanitize=address -g
+SRC = main.c matrix_int.c matrix_double.c matrix_float.c
+OBJ = $(SRC:.c=.o)
+DEPS = myMatrix.h matrix_int.h matrix_double.h matrix_float.h
 
-main.o : main.c
-	cc -c main.c
+all: matrix
 
-myMatrix.o : myMatrix.h matrix_int.h matrix_int.c matrix_double.h matrix_double.c matrix_float.h matrix_float.c
-	cc -c 
+matrix : $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
 
-main_int.o : matrix_int.h matrix_int.c
-	cc -c matrix_int.c
+%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-main_double.o : matrix_double.h matrix_double.c
-	cc -c matrix_double.c
-
-main_float.o : matrix_float.h matrix_float.c
-	cc -c matrix_float.c
-
-
+.PHONY: clean
 clean :
-	rm main.o myMatrix.o
+	rm main.o myMatrix.o main_int.o main_float.o main_double.o 

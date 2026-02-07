@@ -5,8 +5,8 @@
  * @date 2026-02-06
  */
 
- #ifndef MATRIX_INT_H
- #define MATRIX_INT_H
+#ifndef MATRIX_INT_H
+#define MATRIX_INT_H
 
 #include "myMatrix.h"
 
@@ -399,4 +399,4 @@ m_isInvolutory_int(matrix_int_t *m);
 bool
 m_isNilpotent_int(matrix_int_t *m);
 
- #endif
+#endif

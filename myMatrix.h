@@ -131,6 +131,7 @@ typedef struct Matrix_double_s {
         bool is_idempotent;
         bool is_involutory;
         bool is_nilpotent;
+        bool is_stochastic;
     } properties;
 } matrix_double_t;
 

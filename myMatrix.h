@@ -597,7 +597,7 @@ generateRandomMatrix_double(const int i, const int j, const int lower_bound, con
  * @param j The column index, using C style indexing (starting at 0)
  * @return Value at that column x row
  */
-int
+double
 m_at_double(matrix_double_t *m, const int i, const int j);
 
 /**
@@ -606,7 +606,7 @@ m_at_double(matrix_double_t *m, const int i, const int j);
  * @param column_number int The index of the column to select.  This index is C style.  In other words, it begins at 0 and goes up to m->j -1.    This number must be less that m->j.
  * @return Integer array with all values from the column.
  */
-int*
+double*
 m_selectColumn_double(matrix_double_t *m, const int column_number);
 
 /**
@@ -615,7 +615,7 @@ m_selectColumn_double(matrix_double_t *m, const int column_number);
  * @param row_number int The row number.  This row number must be less than 
  * @return An integer array allocated upon the heap
  */
-int*
+double*
 m_selectRow_double(matrix_double_t *m, const int row_number);
 
 /**

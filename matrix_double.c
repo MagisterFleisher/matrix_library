@@ -54,7 +54,7 @@ freeMatrix_double(matrix_double_t *m) {
  * @param array_length size_t. This ensures that the function won't try to copy beyond the size of the array.  It also lets the function be sure that the array fits the matrix size.
  */
 void
-copyArrayToMatrix_double(matrix_double_t *m, const int *array, const size_t array_length) {
+copyArrayToMatrix_double(matrix_double_t *m, const double *array, const size_t array_length) {
     assert(array_length == (m->i * m->j));
 
     for(size_t index = 0; index < array_length; index++) {
@@ -207,7 +207,7 @@ generateRandomMatrix_double(const int i, const int j, const int lower_bound, con
  * @return Value at that column x row
  */
 inline 
-int
+double
 m_at_double(matrix_double_t *m, const int i, const int j) {
     return m->array[(i * m->j) + j];
 }
@@ -216,13 +216,13 @@ m_at_double(matrix_double_t *m, const int i, const int j) {
  * @brief Returns a specific column from the matrix.  The column numbers use C-style indexing.  The index begins at 0, and continues to m->j -1.  For some constant c, select all i such that M[i][c].  Return an array of integers allocated in the heap with those values.  Do not forget to free this array after use.
  * @param m matrix_double_t The matrix to select from
  * @param column_number int The index of the column to select.  This index is C style.  In other words, it begins at 0 and goes up to m->j -1.    This number must be less that m->j.
- * @return Integer array with all values from the column.
+ * @return Double array with all values from the column.
  */
-int*
+double*
 m_selectColumn_double(matrix_double_t *m, const int column_number) {
     assert(0 <= column_number);
     assert(column_number < m->j);
-    int *column = calloc(m->j, sizeof(double));
+    double *column = calloc(m->j, sizeof(double));
     for(int index = 0; index < m->i; index++) {
         column[index] = m_at_double(m, index, column_number);
     }
@@ -235,16 +235,16 @@ m_selectColumn_double(matrix_double_t *m, const int column_number) {
  * @param row_number int The row number.  This row number must be less than 
  * @return An integer array allocated upon the heap
  */
-int*
+double*
 m_selectRow_double(matrix_double_t *m, const int row_number) {
     assert(0 <= row_number);
     assert(row_number < m->i);
 
-    int *row = calloc(m->i, sizeof(double));
+    double *row = calloc(m->i, sizeof(double));
     /**
      * Find the index by multiplying the row_number by the number of columns in the matrix
      */
-    memcpy(row, m->array + (row_number * m->j), m->j * sizeof(double));
+    memcpy(row, &m->array[row_number * m->j], m->j * sizeof(double));
     return row;
 }
 
@@ -283,11 +283,11 @@ m_MatrixAdd_double(matrix_double_t *m1, matrix_double_t *m2) {
 /**
  * @brief This function performs scalar matrix subtraction.  It modifies the matrix passed to the function
  * @param m matrix_double_t The matrix
- * @param scalar const int The scalar used for subtraction 
+ * @param scalar const doubles The scalar used for subtraction 
  */
 inline
 void
-m_ScalarSubtract_double(matrix_double_t *m, const int scalar) {
+m_ScalarSubtract_double(matrix_double_t *m, const double scalar) {
     assert(NULL != m);
     for(size_t index = 0; index < (m->i * m->j); index++) {
         m->array[index] -= scalar;
@@ -334,11 +334,11 @@ m_isEqual_double(matrix_double_t *m1, matrix_double_t *m2) {
 /**
  * @brief This function performs scalar matrix multiplication.  It modifies the matrix passed to the function
  * @param m matrix_double_t The matrix
- * @param scalar const int The scalar used for multiplication 
+ * @param scalar const double The scalar used for multiplication 
  */
 inline
 void
-m_ScalarMultiply_double(matrix_double_t *m, const int scalar) {
+m_ScalarMultiply_double(matrix_double_t *m, const double scalar) {
     assert(NULL != m);
     for(size_t index = 0; index < (m->i * m->j); index++) {
         m->array[index] *= scalar;
@@ -373,11 +373,15 @@ m_MatrixMultiply_double(matrix_double_t *m1, matrix_double_t *m2) {
         for(size_t column_index = 0; column_index < m->j; column_index++) {
             double *row1_array = calloc(m1->i, sizeof(double));
             double *column2_array = calloc(m2->j, sizeof(double));
-            double row_offset = (double) m1->j * row_index;
-            memcpy(row1_array, m1->array + row_offset, m1->i * sizeof(double));
+            //double row_offset = (double) m1->j * row_index;
+            
+            double *row = calloc(m->i, sizeof(double));
+            /*** Find the index by multiplying the row_number by the number of columns in the matrix*/
+            memcpy(row, &m->array[row_index * m->j], m->j * sizeof(double));
+
+            /* memcpy(row1_array, m1->array + row_offset, m1->i * sizeof(double)); */
             for(size_t index = 0; index < m2->j; index++) {
-                column2_array[index] = m_at_double(m2, index, column_index);
-            }
+                column2_array[index] = m_at_double(m2, index, column_index); }
             double element = m_dotProduct_double(row1_array, column2_array, m1->i);
             m->array[result_array_index] = element;
             free(column2_array);
@@ -398,8 +402,8 @@ m_MatrixMultiply_double(matrix_double_t *m1, matrix_double_t *m2) {
  * @return An integer value
  */
 inline
-int
-m_dotProduct_double(int *a1, int *a2, const size_t length) {
+double
+m_dotProduct_double(double *a1, double *a2, const size_t length) {
     int product = 0;
     for(size_t index = 0; index < length; index++) {
         product += a1[index] * a2[index];

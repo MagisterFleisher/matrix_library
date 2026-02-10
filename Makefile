@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -O0 -Wpedantic -lm -fsanitize=address -g
+CFLAGS = -Wall -O3 -Wpedantic -lm -fsanitize=address -g
 SRC = main.c matrix_int.c matrix_double.c matrix_float.c
 OBJ = $(SRC:.c=.o)
 DEPS = myMatrix.h

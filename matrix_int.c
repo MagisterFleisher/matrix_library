@@ -206,6 +206,7 @@ generateRandomMatrix_int(const int i, const int j, const int lower_bound, const 
  * @param j The column index, using C style indexing (starting at 0)
  * @return Value at that column x row
  */
+inline 
 int
 m_at_int(matrix_int_t *m, const int i, const int j) {
     return m->array[(i * m->j) + j];
@@ -253,6 +254,7 @@ m_selectRow_int(matrix_int_t *m, const int row_number) {
  * @param m matrix_int_t The matrix
  * @param scalar const int The 
  */
+inline
 void
 m_ScalarAdd_int(matrix_int_t *m, const int scalar) {
     assert(NULL != m);
@@ -283,6 +285,7 @@ m_MatrixAdd_int(matrix_int_t *m1, matrix_int_t *m2) {
  * @param m matrix_int_t The matrix
  * @param scalar const int The scalar used for subtraction 
  */
+inline
 void
 m_ScalarSubtract_int(matrix_int_t *m, const int scalar) {
     assert(NULL != m);
@@ -313,6 +316,7 @@ m_MatrixSubtract_int(matrix_int_t *m1, matrix_int_t *m2) {
  * @param m2 The second matrix
  * @return boolean. True if matrices are equal, false otherwise
  */
+inline
 bool
 m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2) {
     if((m1->i != m2->i) || (m1->j != m2->j)) {
@@ -332,6 +336,7 @@ m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2) {
  * @param m matrix_int_t The matrix
  * @param scalar const int The scalar used for multiplication 
  */
+inline
 void
 m_ScalarMultiply_int(matrix_int_t *m, const int scalar) {
     assert(NULL != m);
@@ -392,6 +397,7 @@ m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
  * @param length length of both arrays
  * @return An integer value
  */
+inline
 int
 m_dotProduct_int(int *a1, int *a2, const size_t length) {
     int product = 0;
@@ -489,6 +495,7 @@ m_isBinary_int(matrix_int_t *m) {
  * @param m Pointer to the matrix_int_t struct. 
  * @return boolean.  True if this is a column matrix.  False if this is not a column matrix.
  */
+inline 
 bool
 m_isColumn_int(matrix_int_t *m) {
     return (1 == m->i) ? true : false;
@@ -499,6 +506,7 @@ m_isColumn_int(matrix_int_t *m) {
  * @param m Pointer to the matrix_int_t struct.
  * @return boolean.  True if this a row matrix. False if this is not a column matrix.
  */
+inline 
 bool
 m_isRow_int(matrix_int_t *m) {
     return (1 == m->j) ? true : false;
@@ -509,6 +517,7 @@ m_isRow_int(matrix_int_t *m) {
  * @param m Pointer to the matrix_int_t struct.
  * @return boolean.  True if this is a square matrix.  False if this is not a square matrix.
  */
+inline 
 bool
 m_isSquare_int(matrix_int_t *m) {
     return (m->i == m->j) ? true : false;
@@ -519,6 +528,7 @@ m_isSquare_int(matrix_int_t *m) {
  * @param m Pointer to the matrix_int_t struct.
  * @return boolean.  True if this is a singleton matrix.  False if this is not a singleton matrix.
  */
+inline 
 bool
 m_isSingleton_int(matrix_int_t *m) {
     return ((1 == m->i) && (1 == m->j)) ? true : false;
@@ -534,7 +544,6 @@ m_isUpperTriangular_int(matrix_int_t *m) {
     if(false == m_isSquare_int(m)) {
         return false;
     }
-    
 
     /**
      * Go through each row, except the first.  There's nothing to check in the first line.
@@ -590,7 +599,7 @@ m_isDiagonal_int(matrix_int_t *m) {
      * the algorithm must increase the column position by one per row.
      * This library uses an array for all values,
      * so we must keep track of the row number and column number
-     * seperately than the index value.  To do this simply,
+     * separately than the index value.  To do this simply,
      * a modulo operation can help.  This will require only one extra variable,
      * an column position index value.
      */

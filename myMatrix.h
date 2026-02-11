@@ -280,6 +280,9 @@ m_isEqual_int(matrix_int_t *m1, matrix_int_t *m2);
 void
 m_ScalarMultiply_int(matrix_int_t *m, const int scalar);
 
+matrix_int_t*
+m_MatrixMultiply_array_int(matrix_int_t *m1, matrix_int_t *m2);
+
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
  * @param m1 The first matrix
@@ -709,7 +712,7 @@ m_eigenVector_double(matrix_double_t *m);
  * @param m Pointer to matrix_double_t object. 
  * @return A new array in memory.
  */
-double*
+matrix_double_t*
 m_transpose_double(matrix_double_t *m);
 
 /**

@@ -103,7 +103,7 @@ generateIdentityMatrix_int(const int dim) {
      * the algorithm must increase the column position by one per row.
      * This library uses an array for all values,
      * so we must keep track of the row number and column number
-     * seperately than the index value.  To do this simply,
+     * separately than the index value.  To do this simply,
      * a modulo operation can help.  This will require only one extra variable,
      * an column position index value.
      */
@@ -345,6 +345,8 @@ m_ScalarMultiply_int(matrix_int_t *m, const int scalar) {
     }
 }
 
+
+
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
  * @param m1 The first matrix
@@ -360,72 +362,28 @@ m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
      * This allows the multiplication to occur without need to pull a column out each time.
      */
     matrix_int_t *transposed_m2 = m_transpose_int(m2);
-
     /**
      * Thread through array of m1 and transposed m2.
      * The dot product of m1->array[n] and (loop through m2->[chunk])
      * will yield each value of the new matrix.
      */
-    
     int result_index = 0;
+    
     for(int row_index = 0; row_index < result->i; row_index++) {
-        for(int transposed_row_index = 0; transposed_row_index < transposed_m2->i; transposed_row_index++) {
-            int *m1_row = m_selectRow_int(m1, row_index);
+        int *m1_row = m_selectRow_int(m1, row_index);
+        for(int transposed_row_index = 0; transposed_row_index < m1->i; transposed_row_index++) {
             int *transposed_row = m_selectRow_int(transposed_m2, transposed_row_index);
-            result->array[result_index] = v_dotProduct_int(m1_row, transposed_row, m1->i);
-            free(m1_row);
+            for(size_t index = 0; index < m1->i; index++) {
+                result->array[result_index] += m1_row[index] * transposed_row[index];
+            }
+            //result->array[result_index] = v_dotProduct_int(m1_row, transposed_row, m1->i);
             free(transposed_row);
             result_index++;
         }
+        free(m1_row);
     }
-
-    free(transposed_m2);
+    freeMatrix_int(transposed_m2);
     return result;
-}
-
-/**
- * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
- * @param m1 The first matrix
- * @param m2 The second matrix
- * @return A new matrix allocated upon the heap
- */
-matrix_int_t*
-m_MatrixMultiply_int_old(matrix_int_t *m1, matrix_int_t *m2) {
-    assert(m1->j == m2->i);
-    /** The matrix result with have m1->rows and m2->columns */
-    if(m1->properties.is_identity) {
-        return createCopy_int(m2);
-    }
-    if(m2->properties.is_identity) {
-        return createCopy_int(m1);
-    }
-    matrix_int_t *m = initializeMatrix_int(m1->j, m2->i);
-    /**
-     * Take dot product of first row of first matrix 
-     *      and first column of second matrix.
-     */
-    //const size_t result_array_length = m->i * m->j;
-    size_t result_array_index = 0;
-
-    for(size_t row_index = 0; row_index < m->i; row_index++) {
-        for(size_t column_index = 0; column_index < m->j; column_index++) {
-            int *row1_array = calloc(m1->i, sizeof(int));
-            int *column2_array = calloc(m2->j, sizeof(int));
-            int row_offset = m1->j * row_index;
-            memcpy(row1_array, m1->array + row_offset, m1->i * sizeof(int));
-            for(size_t index = 0; index < m2->j; index++) {
-                column2_array[index] = m_at_int(m2, index, column_index);
-            }
-            int element = v_dotProduct_int(row1_array, column2_array, m1->i);
-            m->array[result_array_index] = element;
-            free(column2_array);
-            free(row1_array);
-
-            result_array_index++;
-        }
-    }
-
-    return m;
 }
 
 /**
@@ -482,8 +440,8 @@ m_transpose_int(matrix_int_t *m) {
     for(int m_row_index = 0; m_row_index < m->i; m_row_index++) {
         int *current_row = m_selectColumn_int(m, m_row_index);
         memcpy(&transposed->array[transposed_array_index], current_row, m->i * sizeof(int));
-        transposed_array_index += transposed->i;
         free(current_row);
+        transposed_array_index += transposed->i;
     }
     return transposed;
 }

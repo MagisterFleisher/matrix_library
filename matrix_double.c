@@ -345,6 +345,8 @@ m_ScalarMultiply_double(matrix_double_t *m, const double scalar) {
     }
 }
 
+
+
 /**
  * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
  * @param m1 The first matrix
@@ -353,46 +355,36 @@ m_ScalarMultiply_double(matrix_double_t *m, const double scalar) {
  */
 matrix_double_t*
 m_MatrixMultiply_double(matrix_double_t *m1, matrix_double_t *m2) {
-    assert(m1->j == m2->i);
-    /** The matrix result with have m1->rows and m2->columns */
-    if(m1->properties.is_identity) {
-        return createCopy_double(m2);
-    }
-    if(m2->properties.is_identity) {
-        return createCopy_double(m1);
-    }
-    matrix_double_t *m = initializeMatrix_double(m1->j, m2->i);
+    assert(m1->i == m2->j);
+    matrix_double_t *result = initializeMatrix_double(m1->j, m2->i);
     /**
-     * Take dot product of first row of first matrix 
-     *      and first column of second matrix.
+     * Create a temporary transposed matrix of m2.
+     * This allows the multiplication to occur without need to pull a column out each time.
      */
-    //const size_t result_array_length = m->i * m->j;
-    size_t result_array_index = 0;
-
-    for(size_t row_index = 0; row_index < m->i; row_index++) {
-        for(size_t column_index = 0; column_index < m->j; column_index++) {
-            double *row1_array = calloc(m1->i, sizeof(double));
-            double *column2_array = calloc(m2->j, sizeof(double));
-            //double row_offset = (double) m1->j * row_index;
-            
-            double *row = calloc(m->i, sizeof(double));
-            /*** Find the index by multiplying the row_number by the number of columns in the matrix*/
-            memcpy(row, &m->array[row_index * m->j], m->j * sizeof(double));
-
-            /* memcpy(row1_array, m1->array + row_offset, m1->i * sizeof(double)); */
-            for(size_t index = 0; index < m2->j; index++) {
-                column2_array[index] = m_at_double(m2, index, column_index); }
-            double element = v_dotProduct_double(row1_array, column2_array, m1->i);
-            m->array[result_array_index] = element;
-            free(column2_array);
-            free(row1_array);
-
-            result_array_index++;
+    matrix_double_t *transposed_m2 = m_transpose_double(m2);
+    /**
+     * Thread through array of m1 and transposed m2.
+     * The dot product of m1->array[n] and (loop through m2->[chunk])
+     * will yield each value of the new matrix.
+     */
+    int result_index = 0;
+    
+    for(int row_index = 0; row_index < result->i; row_index++) {
+        double *m1_row = m_selectRow_double(m1, row_index);
+        for(int transposed_row_index = 0; transposed_row_index < m1->i; transposed_row_index++) {
+            double *transposed_row = m_selectRow_double(transposed_m2, transposed_row_index);
+            for(size_t index = 0; index < m1->i; index++) {
+                result->array[result_index] += m1_row[index] * transposed_row[index];
+            }
+            free(transposed_row);
+            result_index++;
         }
+        free(m1_row);
     }
-
-    return m;
+    freeMatrix_double(transposed_m2);
+    return result;
 }
+
 
 /**
  * @brief Finds the dot product of two integer arrays of equal size
@@ -423,6 +415,30 @@ m_eigenValue_double(matrix_double_t *m) {
     }
     return 0;
 }
+
+
+/**
+ * @brief Creates a new matrix in memory containing the transpose of the matrix. 
+ * @param m Pointer to matrix_double_t object. 
+ * @return A new matrix in memory.
+ */
+matrix_double_t*
+m_transpose_double(matrix_double_t *m) {
+    matrix_double_t *transposed = initializeMatrix_double(m->j, m->i);
+    if(m_isIdentity_double(m) || (m_isDiagonal_double(m))) {
+        memcpy(transposed->array, m->array, (m->i * m->j) * sizeof(double));
+        return transposed;
+    }
+    int transposed_array_index = 0;
+    for(int m_row_index = 0; m_row_index < m->i; m_row_index++) {
+        double *current_row = m_selectColumn_double(m, m_row_index);
+        memcpy(&transposed->array[transposed_array_index], current_row, m->i * sizeof(double));
+        free(current_row);
+        transposed_array_index += transposed->i;
+    }
+    return transposed;
+}
+
 
 /**
  * @brief

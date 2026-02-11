@@ -35,7 +35,7 @@ testMatrixInt(void) {
     copyArrayToMatrix_int(m2, matrix_array2, 9);
     (void) printf("\tMatrix 2:\n");
     printMatrix_int(m2);
-
+/* 
     int *column2_matrix2 = m_selectColumn_int(m2, 1);
     (void) printf("\nColumn 2 of matrix 2: ");
     for(int index = 0; index < m->i; index++) {
@@ -54,7 +54,7 @@ testMatrixInt(void) {
 
     (void) printf("Dot product of matrix and column: %d\n", dot_product);
     free(column2_matrix2);
-    free(row2_matrix2);
+    free(row2_matrix2); */
 
     (void) printf("\tTest equality between m1 and m2: %d\n", m_isEqual_int(m, m2));
 
@@ -62,9 +62,11 @@ testMatrixInt(void) {
     matrix_int_t *transposed_m2 = m_transpose_int(m2);
     printMatrix_int(transposed_m2);
     freeMatrix_int(transposed_m2);
+    
     matrix_int_t *test_multiplication = m_MatrixMultiply_int(m, m2);
     (void) printf("\tTest multiplication of matrix 1 X matrix 2: \n");
     printMatrix_int(test_multiplication);
+
     /*
 
     const int matrix_array3[9] = {1, 0, 1,
@@ -111,37 +113,39 @@ testMatrixInt(void) {
     matrix_int_t *random_matrix = generateRandomMatrix_int(4, 4, 0, 100);
     (void) printf("\tTest random matrix 4 x 4, values 0 to 100:\n");
     printMatrix_int(random_matrix);
+*/
 
-    matrix_int_t *random_matrix2 = generateRandomMatrix_int(10000, 10000, 0, 100);
-    (void) printf("\tTest random matrix 1k x 1k, values 0 to 100:\n");
-    printMatrix_int(random_matrix2);
+    matrix_int_t *random_matrix2 = generateRandomMatrix_int(4000, 4000, 0, 100);
+    (void) printf("\tTest random matrix 10k x 10k, values 0 to 100:\n");
+    //printMatrix_int(random_matrix2);
 
-    matrix_int_t *big_multiplication = generateRandomMatrix_int(10000, 10000, 0, 100);
+    matrix_int_t *big_multiplication = generateRandomMatrix_int(4000, 4000, 0, 100);
     (void) printf("\tTest multiplication of two 10k x 10k matrices:\n");
- 
+
     float average_time = 0.0;
     float total_profile = 0.0;
     int iterations_profile = 1000;
-    for(int index = 0; index < iterations_profile; index++) {
+   // for(int index = 0; index < iterations_profile; index++) {
         clock_t time_start = clock();
         matrix_int_t *test_multiplication4 = m_MatrixMultiply_int(random_matrix2, big_multiplication);
         freeMatrix_int(test_multiplication4);
         clock_t time_end = clock();
         total_profile += (float) (time_end - time_start) / CLOCKS_PER_SEC;
-    }
+    //}
     average_time = (total_profile / ((float) iterations_profile));
     (void) printf("-------------------\n\t\tBig matrix average performance: %f\n--------------------\n\n", average_time);
- */
+
 
     //    printMatrix_int(test_multiplication4);
 /*     (void) printf("\tTesting big identity multiplication...");
     matrix_int_t *big_identity = generateIdentityMatrix_int(10000);
     matrix_int_t *big_multiplication_identity = m_MatrixMultiply_int(big_identity, big_multiplication);
  */
-    (void) printf("\tTested big identity multiplication\n");
+   /* (void) printf("\tTested big identity multiplication\n");
     
     matrix_int_t *test_identity_m = generateIdentityMatrix_int(4);
     (void) printf("\tTest Generate identity matrix, 4 x 4:\n");
+    */
    // printMatrix_int(test_identity_m);
 
  
@@ -153,7 +157,7 @@ testMatrixInt(void) {
     //freeMatrix_int(random_matrix);
     //freeMatrix_int(random_matrix2);
     
-    freeMatrix_int(test_identity_m);
+    //freeMatrix_int(test_identity_m);
     //freeMatrix_int(test_multiplication3);
     //freeMatrix_int(test_multiplication2);
     /* freeMatrix_int(m7);
@@ -324,8 +328,8 @@ testMatrixDouble(void) {
 
 int
 main(int argument_count, char **argument_vector) {
-    testMatrixInt();
-    // testMatrixDouble();
+    // testMatrixInt();
+    testMatrixDouble();
     (void) printf("Argument count: %d\n", argument_count);
     return 0;
 }

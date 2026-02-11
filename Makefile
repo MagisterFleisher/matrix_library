@@ -14,7 +14,7 @@ matrix : $(OBJ)
 
 .PHONY: clean 
 clean :
-	rm main.o myMatrix.o matrix_int.o matrix_float.o matrix_double.o 
+	rm main.o matrix_int.o matrix_float.o matrix_double.o 
 
 #
 # matrix1 : main.c main.o myMatrix.c myMatrix.h myMatrix.o

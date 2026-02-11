@@ -299,7 +299,7 @@ m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2);
  */
 
 int
-m_dotProduct_int(int *a1, int *a2, const size_t length);
+v_dotProduct_int(int *a1, int *a2, const size_t length);
 
 /**
  * @brief
@@ -318,11 +318,11 @@ complex*
 m_eigenVector_int(matrix_int_t *m);
 
 /**
- * @brief Creates a new array in memory containing the transpose of the matrix. 
+ * @brief Creates a new matrix in memory containing the transpose of the matrix. 
  * @param m Pointer to matrix_int_t object. 
- * @return A new array in memory.
+ * @return A new matrix in memory.
  */
-int*
+matrix_int_t*
 m_transpose_int(matrix_int_t *m);
 
 /**
@@ -686,7 +686,7 @@ m_MatrixMultiply_double(matrix_double_t *m1, matrix_double_t *m2);
  * @return An double value
  */
 double
-m_dotProduct_double(double *a1, double *a2, const size_t length);
+v_dotProduct_double(double *a1, double *a2, const size_t length);
 
 /**
  * @brief

@@ -382,7 +382,7 @@ m_MatrixMultiply_double(matrix_double_t *m1, matrix_double_t *m2) {
             /* memcpy(row1_array, m1->array + row_offset, m1->i * sizeof(double)); */
             for(size_t index = 0; index < m2->j; index++) {
                 column2_array[index] = m_at_double(m2, index, column_index); }
-            double element = m_dotProduct_double(row1_array, column2_array, m1->i);
+            double element = v_dotProduct_double(row1_array, column2_array, m1->i);
             m->array[result_array_index] = element;
             free(column2_array);
             free(row1_array);
@@ -403,7 +403,7 @@ m_MatrixMultiply_double(matrix_double_t *m1, matrix_double_t *m2) {
  */
 inline
 double
-m_dotProduct_double(double *a1, double *a2, const size_t length) {
+v_dotProduct_double(double *a1, double *a2, const size_t length) {
     int product = 0;
     for(size_t index = 0; index < length; index++) {
         product += a1[index] * a2[index];

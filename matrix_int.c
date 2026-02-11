@@ -353,6 +353,44 @@ m_ScalarMultiply_int(matrix_int_t *m, const int scalar) {
  */
 matrix_int_t*
 m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
+    assert(m1->i == m2->j);
+    matrix_int_t *result = initializeMatrix_int(m1->j, m2->i);
+    /**
+     * Create a temporary transposed matrix of m2.
+     * This allows the multiplication to occur without need to pull a column out each time.
+     */
+    matrix_int_t *transposed_m2 = m_transpose_int(m2);
+
+    /**
+     * Thread through array of m1 and transposed m2.
+     * The dot product of m1->array[n] and (loop through m2->[chunk])
+     * will yield each value of the new matrix.
+     */
+    
+    int result_index = 0;
+    for(int row_index = 0; row_index < result->i; row_index++) {
+        for(int transposed_row_index = 0; transposed_row_index < transposed_m2->i; transposed_row_index++) {
+            int *m1_row = m_selectRow_int(m1, row_index);
+            int *transposed_row = m_selectRow_int(transposed_m2, transposed_row_index);
+            result->array[result_index] = v_dotProduct_int(m1_row, transposed_row, m1->i);
+            free(m1_row);
+            free(transposed_row);
+            result_index++;
+        }
+    }
+
+    free(transposed_m2);
+    return result;
+}
+
+/**
+ * @brief This function performs matrix multiplication, M1 x M2.  The result will be a new matrix struct allocated upon the heap.
+ * @param m1 The first matrix
+ * @param m2 The second matrix
+ * @return A new matrix allocated upon the heap
+ */
+matrix_int_t*
+m_MatrixMultiply_int_old(matrix_int_t *m1, matrix_int_t *m2) {
     assert(m1->j == m2->i);
     /** The matrix result with have m1->rows and m2->columns */
     if(m1->properties.is_identity) {
@@ -378,7 +416,7 @@ m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
             for(size_t index = 0; index < m2->j; index++) {
                 column2_array[index] = m_at_int(m2, index, column_index);
             }
-            int element = m_dotProduct_int(row1_array, column2_array, m1->i);
+            int element = v_dotProduct_int(row1_array, column2_array, m1->i);
             m->array[result_array_index] = element;
             free(column2_array);
             free(row1_array);
@@ -399,7 +437,7 @@ m_MatrixMultiply_int(matrix_int_t *m1, matrix_int_t *m2) {
  */
 inline
 int
-m_dotProduct_int(int *a1, int *a2, const size_t length) {
+v_dotProduct_int(int *a1, int *a2, const size_t length) {
     int product = 0;
     for(size_t index = 0; index < length; index++) {
         product += a1[index] * a2[index];
@@ -429,25 +467,25 @@ complex*
 m_eigenVector_int(matrix_int_t *m);
 
 /**
- * @brief Creates a new array in memory containing the transpose of the matrix. 
+ * @brief Creates a new matrix in memory containing the transpose of the matrix. 
  * @param m Pointer to matrix_int_t object. 
- * @return A new array in memory.
+ * @return A new matrix in memory.
  */
-int*
+matrix_int_t*
 m_transpose_int(matrix_int_t *m) {
-    int *transpose_array = calloc(m->i * m->j, sizeof(int));
+    matrix_int_t *transposed = initializeMatrix_int(m->j, m->i);
     if(m_isIdentity_int(m) || (m_isDiagonal_int(m))) {
-        memcpy(transpose_array, m->array, (m->i * m->j) * sizeof(int));
-        return transpose_array;
+        memcpy(transposed->array, m->array, (m->i * m->j) * sizeof(int));
+        return transposed;
     }
-    int transpose_index = 0;
-    for(int i_index = 0; i_index < m->i; i_index++) {
-        for(int j_index = 0; j_index < m->j; j_index++) {
-            transpose_array[transpose_index] = m_at_int(m, j_index, i_index);
-            transpose_index++;
-        }
+    int transposed_array_index = 0;
+    for(int m_row_index = 0; m_row_index < m->i; m_row_index++) {
+        int *current_row = m_selectColumn_int(m, m_row_index);
+        memcpy(&transposed->array[transposed_array_index], current_row, m->i * sizeof(int));
+        transposed_array_index += transposed->i;
+        free(current_row);
     }
-    return transpose_array;
+    return transposed;
 }
 
 /**
